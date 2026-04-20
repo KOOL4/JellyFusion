@@ -1,1 +1,5 @@
 
+on:
+  push:
+    tags:
+      - 'v*'
