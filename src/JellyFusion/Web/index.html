@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JellyFusion</title>
+    <link rel="stylesheet" href="/web/css/site.css">
+</head>
+<body>
+<div id="JellyFusionConfigPage" data-role="page" class="page libraryPage noSecondaryNavPage">
+
+    <div data-role="content">
+        <div class="content-primary">
+
+            <!-- Header -->
+            <div class="jf-header">
+                <div class="jf-logo">J+</div>
+                <div>
+                    <h2 class="jf-title" data-i18n="plugin.name">JellyFusion</h2>
+                    <p class="jf-subtitle" data-i18n="plugin.description"></p>
+                </div>
+                <div class="jf-header-right">
+                    <label class="jf-label" data-i18n="general.language">Idioma</label>
+                    <select id="jf-language" class="emby-select-withcolor emby-select">
+                        <option value="es">🌎 Español Latino</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="pt">🇧🇷 Português</option>
+                        <option value="fr">🇫🇷 Français</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tab bar -->
+            <div class="jf-tabs">
+                <button class="jf-tab active" data-tab="slider">🎬 <span data-i18n="nav.slider">Editor's Choice</span></button>
+                <button class="jf-tab" data-tab="badges">🏷️ <span data-i18n="nav.badges">JellyTag</span></button>
+                <button class="jf-tab" data-tab="studios">🎭 <span data-i18n="nav.studios">Estudios</span></button>
+                <button class="jf-tab" data-tab="themes">🎨 <span data-i18n="nav.themes">Temas</span></button>
+                <button class="jf-tab" data-tab="notif">🔔 <span data-i18n="nav.notifications">Notificaciones</span></button>
+            </div>
+
+            <div class="jf-body">
+                <!-- ═══════════ MAIN PANEL ═══════════ -->
+                <div class="jf-main">
+
+                    <!-- ── SLIDER TAB ── -->
+                    <div id="jf-tab-slider" class="jf-panel">
+                        <div class="jf-panel-header">
+                            <h3 data-i18n="nav.slider">Editor's Choice</h3>
+                            <label class="jf-toggle"><input type="checkbox" id="slider-enabled" checked><span></span> <span data-i18n="general.enabled">Activar</span></label>
+                        </div>
+
+                        <details class="jf-acc" open>
+                            <summary data-i18n="slider.mode">Modo de contenido</summary>
+                            <div class="jf-acc-body">
+                                <div class="jf-radio-list">
+                                    <label><input type="radio" name="slider-mode" value="Favourites"> <b data-i18n="slider.mode.favourites">Favoritos</b> <span data-i18n="slider.mode.favourites.desc">Ítems favoritos del usuario especificado</span></label>
+                                    <label><input type="radio" name="slider-mode" value="Random" checked> <b data-i18n="slider.mode.random">Aleatorio</b> <span>Selección aleatoria de la librería</span></label>
+                                    <label><input type="radio" name="slider-mode" value="Collections"> <b data-i18n="slider.mode.collections">Colecciones</b> <span>Ítems de colecciones especificadas</span></label>
+                                    <label><input type="radio" name="slider-mode" value="New"> <b data-i18n="slider.mode.new">Recientes</b> <span>Películas y series estrenadas recientemente</span></label>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="slider.trailer">Trailer automático</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="trailer-enabled" checked> <span data-i18n="slider.trailer">Reproducir trailer al pasar el slider</span></label>
+                                <div class="jf-form-group">
+                                    <label data-i18n="slider.trailer.source">Fuente de trailers</label>
+                                    <select id="trailer-source" class="emby-select-withcolor emby-select">
+                                        <option value="TMDB">TMDB (recomendado)</option>
+                                        <option value="YouTube">YouTube API</option>
+                                        <option value="Local">Archivos locales</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label data-i18n="slider.trailer.apikey">TMDB API Key</label>
+                                    <input type="password" id="tmdb-api-key" class="emby-input" placeholder="••••••••••••••••">
+                                    <p class="jf-hint">Clave de <a href="https://www.themoviedb.org/settings/api" target="_blank">themoviedb.org</a></p>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label data-i18n="slider.trailer.lang">Idioma del trailer</label>
+                                    <select id="trailer-lang" class="emby-select-withcolor emby-select">
+                                        <option value="Auto">Automático (idioma del plugin)</option>
+                                        <option value="es-419">Español Latino</option>
+                                        <option value="en">Inglés</option>
+                                        <option value="pt">Português</option>
+                                        <option value="fr">Français</option>
+                                    </select>
+                                </div>
+                                <label class="jf-check-row"><input type="checkbox" id="trailer-sub-fallback" checked> <span data-i18n="slider.trailer.fallback">Fallback a subtítulos si no hay audio en el idioma</span></label>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="slider.autoplay">Reproducción automática</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="autoplay-enabled" checked> <span>Activar autoplay</span></label>
+                                <div class="jf-form-group">
+                                    <label>Intervalo (segundos)</label>
+                                    <input type="number" id="autoplay-interval" class="emby-input" value="10" min="3" max="60">
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="slider.filter">Filtros</summary>
+                            <div class="jf-acc-body">
+                                <div class="jf-form-group">
+                                    <label data-i18n="slider.filter.max">Máx. ítems mostrados</label>
+                                    <input type="number" id="slider-max-items" class="emby-input" value="5" min="1" max="20">
+                                </div>
+                                <div class="jf-form-group">
+                                    <label data-i18n="slider.filter.community">Rating mínimo comunidad (0–10)</label>
+                                    <input type="number" id="slider-min-community" class="emby-input" value="0" min="0" max="10" step="0.1">
+                                </div>
+                                <div class="jf-form-group">
+                                    <label data-i18n="slider.filter.critic">Rating mínimo críticos (0–100)</label>
+                                    <input type="number" id="slider-min-critic" class="emby-input" value="0" min="0" max="100">
+                                </div>
+                                <div class="jf-form-group">
+                                    <label data-i18n="slider.filter.parental">Rating parental máximo</label>
+                                    <select id="slider-parental" class="emby-select-withcolor emby-select">
+                                        <option value="UserProfile">Perfil de usuario (por defecto)</option>
+                                        <option value="G">G</option>
+                                        <option value="PG">PG</option>
+                                        <option value="PG-13">PG-13</option>
+                                        <option value="R">R</option>
+                                    </select>
+                                </div>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-show-played" checked> <span data-i18n="slider.filter.played">Mostrar contenido ya visto</span></label>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="slider.display">Visualización</summary>
+                            <div class="jf-acc-body">
+                                <div class="jf-form-group">
+                                    <label>Título del banner</label>
+                                    <input type="text" id="slider-heading" class="emby-input" placeholder="Dejar vacío para no mostrar título">
+                                </div>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-show-playbtn" checked> <span>Mostrar botón de reproducción</span></label>
+                                <div class="jf-form-group">
+                                    <label>Texto del botón</label>
+                                    <input type="text" id="slider-play-text" class="emby-input" placeholder="▶ Reproducir (por defecto)">
+                                </div>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-show-rating" checked> <span>Mostrar rating de comunidad</span></label>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-show-desc" checked> <span>Mostrar descripción</span></label>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-hide-tv" checked> <span>Ocultar en TVs (Android TV)</span></label>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-hero" checked> <span>Estilo Hero Display</span></label>
+                                <div class="jf-form-group">
+                                    <label>Posición de imagen (Hero)</label>
+                                    <select id="slider-img-pos" class="emby-select-withcolor emby-select">
+                                        <option value="Bottom">Abajo</option>
+                                        <option value="Center">Centro</option>
+                                        <option value="Top">Arriba</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Efecto de transición</label>
+                                    <select id="slider-transition" class="emby-select-withcolor emby-select">
+                                        <option value="Slide">Slide (predeterminado)</option>
+                                        <option value="Fade">Fade</option>
+                                        <option value="Zoom">Zoom</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Altura del banner</label>
+                                    <select id="slider-height" class="emby-select-withcolor emby-select">
+                                        <option value="Small">Pequeño</option>
+                                        <option value="Medium">Mediano</option>
+                                        <option value="Large" selected>Grande</option>
+                                        <option value="Fullscreen">Pantalla completa</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="slider.tech">Configuración técnica</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="slider-injection" checked>
+                                    <div><span>Inyección de script cliente</span>
+                                    <p class="jf-hint">Requiere permisos de escritura en jellyfin-web/index.html. Cambios aplican tras reiniciar.</p></div>
+                                </label>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-filetrans">
+                                    <div><span>Usar plugin FileTransformation (recomendado)</span>
+                                    <p class="jf-hint">Instala <a href="https://www.iamparadox.dev/jellyfin/plugins/manifest.json" target="_blank">FileTransformation</a> primero.</p></div>
+                                </label>
+                                <label class="jf-check-row"><input type="checkbox" id="slider-reduce" checked>
+                                    <div><span>Reducir tamaño de imágenes</span>
+                                    <p class="jf-hint">Mejora velocidad de carga pero aumenta uso de CPU.</p></div>
+                                </label>
+                            </div>
+                        </details>
+
+                        <div class="jf-actions">
+                            <button class="emby-button button-submit jf-btn-save" data-module="slider" data-i18n="general.save">💾 Guardar</button>
+                        </div>
+                    </div><!-- /slider tab -->
+
+                    <!-- ── BADGES TAB ── -->
+                    <div id="jf-tab-badges" class="jf-panel" style="display:none">
+                        <div class="jf-panel-header">
+                            <h3 data-i18n="nav.badges">JellyTag</h3>
+                            <label class="jf-toggle"><input type="checkbox" id="badges-enabled" checked><span></span> <span data-i18n="general.enabled">Activar</span></label>
+                        </div>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="badges.libraries">Librerías</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="badges-all-libs" checked> <span>Todas las librerías</span></label>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc" open>
+                            <summary data-i18n="badges.posters">Pósters (Primary)</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="badges-posters" checked> <span>Activar badges en pósters</span></label>
+                                <div class="jf-badge-order" id="badge-order-list">
+                                    <p class="jf-hint">Arrastra para cambiar el orden de los badges (arriba = primer badge visible):</p>
+                                    <div class="jf-sortable-item" data-key="Resolution">📺 Resolución</div>
+                                    <div class="jf-sortable-item" data-key="HDR">🌈 HDR / 3D</div>
+                                    <div class="jf-sortable-item" data-key="Codec">⚙️ Codec</div>
+                                    <div class="jf-sortable-item" data-key="Audio">🔊 Audio</div>
+                                    <div class="jf-sortable-item" data-key="Language">🌎 Idioma</div>
+                                    <div class="jf-sortable-item" data-key="Status">🆕 Estado (NUEVO/KID)</div>
+                                </div>
+                                <div class="jf-form-group" style="margin-top:12px">
+                                    <label>Posición de badges</label>
+                                    <select id="badge-position" class="emby-select-withcolor emby-select">
+                                        <option value="TopLeft">Arriba izquierda</option>
+                                        <option value="TopRight">Arriba derecha</option>
+                                        <option value="BottomLeft">Abajo izquierda</option>
+                                        <option value="BottomRight">Abajo derecha</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-row">
+                                    <div class="jf-form-group">
+                                        <label>Tamaño de badge (%)</label>
+                                        <input type="number" id="badge-size" class="emby-input" value="15" min="5" max="40">
+                                    </div>
+                                    <div class="jf-form-group">
+                                        <label>Separación (%)</label>
+                                        <input type="number" id="badge-gap" class="emby-input" value="10" min="0" max="50">
+                                    </div>
+                                    <div class="jf-form-group">
+                                        <label>Margen (%)</label>
+                                        <input type="number" id="badge-margin" class="emby-input" value="2" min="0" max="20">
+                                    </div>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Diseño</label>
+                                    <select id="badge-layout" class="emby-select-withcolor emby-select">
+                                        <option value="Vertical">Vertical</option>
+                                        <option value="Horizontal">Horizontal</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Estilo de badge</label>
+                                    <select id="badge-style" class="emby-select-withcolor emby-select">
+                                        <option value="Image">Imagen (SVG)</option>
+                                        <option value="Text">Texto</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="badges.thumbs">Miniaturas (Thumb)</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="thumb-same" checked>
+                                    <div><span>Igual que póster</span><p class="jf-hint">Usa la misma configuración que los pósters.</p></div>
+                                </label>
+                                <div class="jf-form-group">
+                                    <label>Reducción de tamaño (puntos %)</label>
+                                    <input type="number" id="thumb-reduction" class="emby-input" value="5" min="0" max="20">
+                                    <p class="jf-hint">Ej: 5 significa que un badge de 15% en póster será 10% en miniatura.</p>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc" open>
+                            <summary>🌎 Idioma — LAT / SUB</summary>
+                            <div class="jf-acc-body">
+                                <div class="jf-form-group">
+                                    <label>Bandera para Español Latino (es-419)</label>
+                                    <select id="lat-flag" class="emby-select-withcolor emby-select">
+                                        <option value="Mexico">🇲🇽 Bandera mexicana</option>
+                                        <option value="Spain">🇪🇸 Bandera española</option>
+                                        <option value="None">Sin bandera (solo texto LAT)</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Texto para audio Latino</label>
+                                    <input type="text" id="lat-text" class="emby-input" value="LAT">
+                                    <p class="jf-hint">Se muestra junto a la bandera del país de producción cuando se detecta audio es-419.</p>
+                                </div>
+                                <label class="jf-check-row"><input type="checkbox" id="lat-country" checked>
+                                    <div><span>Mostrar bandera del país de producción con LAT</span>
+                                    <p class="jf-hint">Ej: película francesa con doblaje LAT → 🇫🇷 LAT</p></div>
+                                </label>
+                                <hr class="jf-hr">
+                                <label class="jf-check-row"><input type="checkbox" id="sub-simple" checked>
+                                    <div><span>Modo simplificado para múltiples subtítulos</span>
+                                    <p class="jf-hint">Cuando hay muchos idiomas de subtítulos, muestra solo "SUB" en vez de todas las banderas.</p></div>
+                                </label>
+                                <div class="jf-form-group">
+                                    <label>Umbral para activar modo SUB (cantidad de idiomas)</label>
+                                    <input type="number" id="sub-threshold" class="emby-input" value="3" min="2" max="10">
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Texto del badge SUB</label>
+                                    <input type="text" id="sub-text" class="emby-input" value="SUB">
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc" open>
+                            <summary>🆕 Estado — NUEVO / KID</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="new-enabled" checked> <span>Mostrar badge "NUEVO"</span></label>
+                                <div class="jf-form-group">
+                                    <label>Días para considerar "Nuevo"</label>
+                                    <input type="number" id="new-days" class="emby-input" value="30" min="1" max="365">
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Texto</label>
+                                    <input type="text" id="new-text" class="emby-input" value="NUEVO">
+                                </div>
+                                <div class="jf-form-row">
+                                    <div class="jf-form-group">
+                                        <label>Color fondo</label>
+                                        <div class="jf-color-row"><input type="color" id="new-bg-color" value="#1a3a1a"><input type="text" id="new-bg-hex" class="emby-input" value="#1a3a1a"></div>
+                                    </div>
+                                    <div class="jf-form-group">
+                                        <label>Color texto</label>
+                                        <div class="jf-color-row"><input type="color" id="new-fg-color" value="#6fcf6f"><input type="text" id="new-fg-hex" class="emby-input" value="#6fcf6f"></div>
+                                    </div>
+                                </div>
+                                <hr class="jf-hr">
+                                <label class="jf-check-row"><input type="checkbox" id="kid-enabled" checked> <span>Mostrar badge "KID"</span></label>
+                                <div class="jf-form-group">
+                                    <label>Texto</label>
+                                    <input type="text" id="kid-text" class="emby-input" value="KID">
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Detectar contenido infantil por</label>
+                                    <select id="kid-detect" class="emby-select-withcolor emby-select">
+                                        <option value="ParentalRating">Rating parental (G, TV-Y, etc.)</option>
+                                        <option value="Tag">Etiquetas de librería</option>
+                                        <option value="Both">Ambos</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-row">
+                                    <div class="jf-form-group">
+                                        <label>Color fondo</label>
+                                        <div class="jf-color-row"><input type="color" id="kid-bg-color" value="#3a2a1a"><input type="text" id="kid-bg-hex" class="emby-input" value="#3a2a1a"></div>
+                                    </div>
+                                    <div class="jf-form-group">
+                                        <label>Color texto</label>
+                                        <div class="jf-color-row"><input type="color" id="kid-fg-color" value="#f0a050"><input type="text" id="kid-fg-hex" class="emby-input" value="#f0a050"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="badges.customtext">Texto personalizado de badges</summary>
+                            <div class="jf-acc-body">
+                                <p class="jf-hint">Sobreescribe el texto de cualquier badge. Dejar vacío para usar el texto por defecto.</p>
+                                <div class="jf-form-grid">
+                                    <div class="jf-form-group"><label>4K</label><input type="text" class="emby-input jf-badge-text" data-key="4K" placeholder="4K"></div>
+                                    <div class="jf-form-group"><label>1080p</label><input type="text" class="emby-input jf-badge-text" data-key="1080p" placeholder="1080p"></div>
+                                    <div class="jf-form-group"><label>720p</label><input type="text" class="emby-input jf-badge-text" data-key="720p" placeholder="720p"></div>
+                                    <div class="jf-form-group"><label>SD</label><input type="text" class="emby-input jf-badge-text" data-key="SD" placeholder="SD"></div>
+                                    <div class="jf-form-group"><label>HDR10</label><input type="text" class="emby-input jf-badge-text" data-key="HDR10" placeholder="HDR10"></div>
+                                    <div class="jf-form-group"><label>HDR10+</label><input type="text" class="emby-input jf-badge-text" data-key="HDR10Plus" placeholder="HDR10+"></div>
+                                    <div class="jf-form-group"><label>Dolby Vision</label><input type="text" class="emby-input jf-badge-text" data-key="DolbyVision" placeholder="DV"></div>
+                                    <div class="jf-form-group"><label>HLG</label><input type="text" class="emby-input jf-badge-text" data-key="HLG" placeholder="HLG"></div>
+                                    <div class="jf-form-group"><label>Dolby Atmos</label><input type="text" class="emby-input jf-badge-text" data-key="DolbyAtmos" placeholder="ATMOS"></div>
+                                    <div class="jf-form-group"><label>DTS:X</label><input type="text" class="emby-input jf-badge-text" data-key="DTSX" placeholder="DTS:X"></div>
+                                    <div class="jf-form-group"><label>TrueHD</label><input type="text" class="emby-input jf-badge-text" data-key="TrueHD" placeholder="TrueHD"></div>
+                                    <div class="jf-form-group"><label>DTS-HD MA</label><input type="text" class="emby-input jf-badge-text" data-key="DTSHD" placeholder="DTS-HD MA"></div>
+                                    <div class="jf-form-group"><label>7.1</label><input type="text" class="emby-input jf-badge-text" data-key="7.1" placeholder="7.1"></div>
+                                    <div class="jf-form-group"><label>5.1</label><input type="text" class="emby-input jf-badge-text" data-key="5.1" placeholder="5.1"></div>
+                                    <div class="jf-form-group"><label>HEVC</label><input type="text" class="emby-input jf-badge-text" data-key="HEVC" placeholder="HEVC"></div>
+                                    <div class="jf-form-group"><label>AV1</label><input type="text" class="emby-input jf-badge-text" data-key="AV1" placeholder="AV1"></div>
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="badges.custombadges">Badges personalizados (imágenes)</summary>
+                            <div class="jf-acc-body">
+                                <p class="jf-hint">Haz clic en un badge para subir una imagen personalizada (SVG, PNG o JPEG). Clic en ✕ para revertir al badge por defecto.</p>
+                                <div class="jf-badge-grid" id="custom-badge-grid">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary data-i18n="badges.perf">Rendimiento</summary>
+                            <div class="jf-acc-body">
+                                <div class="jf-form-row">
+                                    <div class="jf-form-group">
+                                        <label>Duración de caché (horas)</label>
+                                        <input type="number" id="cache-duration" class="emby-input" value="24" min="1" max="720">
+                                    </div>
+                                    <div class="jf-form-group">
+                                        <label>Formato de salida</label>
+                                        <select id="output-format" class="emby-select-withcolor emby-select">
+                                            <option value="JPEG">JPEG</option>
+                                            <option value="PNG">PNG</option>
+                                            <option value="WebP">WebP</option>
+                                        </select>
+                                    </div>
+                                    <div class="jf-form-group">
+                                        <label>Calidad JPEG</label>
+                                        <input type="number" id="jpeg-quality" class="emby-input" value="90" min="1" max="100">
+                                    </div>
+                                </div>
+                                <p class="jf-hint" id="cache-stats">Cargando estadísticas de caché...</p>
+                            </div>
+                        </details>
+
+                        <div class="jf-actions">
+                            <button class="emby-button button-submit jf-btn-save" data-module="badges">💾 Guardar</button>
+                            <button class="emby-button" id="btn-clear-cache">🗑 Limpiar caché</button>
+                            <button class="emby-button" id="btn-export-config">📤 Exportar config</button>
+                            <button class="emby-button" id="btn-import-config">📥 Importar config</button>
+                            <input type="file" id="import-file-input" accept=".json" style="display:none">
+                            <button class="emby-button jf-btn-danger" id="btn-reset-all">↺ Restablecer todo</button>
+                        </div>
+                    </div><!-- /badges tab -->
+
+                    <!-- ── STUDIOS TAB ── -->
+                    <div id="jf-tab-studios" class="jf-panel" style="display:none">
+                        <div class="jf-panel-header">
+                            <h3 data-i18n="studios.title">Estudios destacados</h3>
+                            <label class="jf-toggle"><input type="checkbox" id="studios-enabled" checked><span></span> <span data-i18n="general.enabled">Activar</span></label>
+                        </div>
+                        <p class="jf-hint" style="margin-bottom:16px">Los estudios aparecen debajo del slider principal. Al hacer clic se navega al contenido de ese estudio.</p>
+
+                        <details class="jf-acc" open>
+                            <summary>Apariencia de la sección</summary>
+                            <div class="jf-acc-body">
+                                <div class="jf-form-group"><label>Título de la sección</label><input type="text" id="studios-section-title" class="emby-input" value="Estudios"></div>
+                                <div class="jf-form-group">
+                                    <label>Estilo de imagen</label>
+                                    <select id="studios-img-style" class="emby-select-withcolor emby-select">
+                                        <option value="Logo">Logo (imagen/GIF)</option>
+                                        <option value="Text">Texto estilizado</option>
+                                        <option value="LogoAndName">Logo + nombre</option>
+                                    </select>
+                                </div>
+                                <div class="jf-form-row">
+                                    <div class="jf-form-group"><label>Ancho (px)</label><input type="number" id="studios-card-w" class="emby-input" value="120" min="60" max="300"></div>
+                                    <div class="jf-form-group"><label>Alto (px)</label><input type="number" id="studios-card-h" class="emby-input" value="60" min="30" max="200"></div>
+                                    <div class="jf-form-group"><label>Radio borde (px)</label><input type="number" id="studios-radius" class="emby-input" value="8" min="0" max="50"></div>
+                                </div>
+                                <label class="jf-check-row"><input type="checkbox" id="studios-show-name" checked> <span>Mostrar nombre debajo del logo</span></label>
+                                <label class="jf-check-row"><input type="checkbox" id="studios-hover" checked> <span>Efecto hover (zoom / brillo)</span></label>
+                            </div>
+                        </details>
+
+                        <div class="jf-studios-list" id="studios-list">
+                            <!-- Populated by JS -->
+                        </div>
+                        <button class="emby-button jf-btn-add-studio" id="btn-add-studio">+ Agregar estudio</button>
+
+                        <div class="jf-add-studio-form" id="add-studio-form" style="display:none">
+                            <h4>Agregar / editar estudio</h4>
+                            <div class="jf-form-group"><label>Nombre del estudio</label><input type="text" id="studio-name-input" class="emby-input" placeholder="Ej: A24, Studio Ghibli..."></div>
+                            <div class="jf-form-group"><label>URL del logo (imagen o GIF)</label><input type="text" id="studio-logo-input" class="emby-input" placeholder="https://..."></div>
+                            <div class="jf-form-group">
+                                <label>Enlace al contenido</label>
+                                <select id="studio-link-mode" class="emby-select-withcolor emby-select">
+                                    <option value="Auto">Auto (buscar por nombre de estudio)</option>
+                                    <option value="CustomUrl">URL personalizada</option>
+                                </select>
+                            </div>
+                            <div class="jf-form-group" id="studio-custom-url-group" style="display:none">
+                                <label>URL personalizada</label>
+                                <input type="text" id="studio-custom-url" class="emby-input" placeholder="https://...">
+                            </div>
+                            <div class="jf-actions">
+                                <button class="emby-button button-submit" id="btn-studio-save">Guardar estudio</button>
+                                <button class="emby-button" id="btn-studio-cancel">Cancelar</button>
+                            </div>
+                        </div>
+
+                        <div class="jf-actions" style="margin-top:16px">
+                            <button class="emby-button button-submit jf-btn-save" data-module="studios">💾 Guardar</button>
+                        </div>
+                    </div><!-- /studios tab -->
+
+                    <!-- ── THEMES TAB ── -->
+                    <div id="jf-tab-themes" class="jf-panel" style="display:none">
+                        <div class="jf-panel-header"><h3 data-i18n="themes.title">Temas de interfaz</h3></div>
+                        <p class="jf-hint" style="margin-bottom:16px">Elige el estilo visual. Cada tema modifica colores, tipografía y disposición del slider principal.</p>
+
+                        <div class="jf-theme-grid" id="theme-grid">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <details class="jf-acc" style="margin-top:16px">
+                            <summary>Personalización del tema seleccionado</summary>
+                            <div class="jf-acc-body">
+                                <div class="jf-form-row">
+                                    <div class="jf-form-group">
+                                        <label>Color primario</label>
+                                        <div class="jf-color-row"><input type="color" id="theme-primary-color" value="#00a4dc"><input type="text" id="theme-primary-hex" class="emby-input" value="#00a4dc"></div>
+                                    </div>
+                                    <div class="jf-form-group">
+                                        <label>Color de fondo</label>
+                                        <div class="jf-color-row"><input type="color" id="theme-bg-color" value="#101010"><input type="text" id="theme-bg-hex" class="emby-input" value="#101010"></div>
+                                    </div>
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Fuente del banner</label>
+                                    <select id="theme-font" class="emby-select-withcolor emby-select">
+                                        <option value="">Predeterminada</option>
+                                        <option value="Georgia, serif">Georgia (serif)</option>
+                                        <option value="'Montserrat', sans-serif">Montserrat</option>
+                                        <option value="'Bebas Neue', sans-serif">Bebas Neue</option>
+                                        <option value="'Impact', sans-serif">Impact</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </details>
+
+                        <div class="jf-actions">
+                            <button class="emby-button button-submit jf-btn-save" data-module="themes">🎨 Aplicar tema</button>
+                            <button class="emby-button" id="btn-reset-theme">↺ Restablecer</button>
+                        </div>
+                    </div><!-- /themes tab -->
+
+                    <!-- ── NOTIFICATIONS TAB ── -->
+                    <div id="jf-tab-notif" class="jf-panel" style="display:none">
+                        <div class="jf-panel-header"><h3 data-i18n="nav.notifications">Notificaciones</h3></div>
+
+                        <details class="jf-acc" open>
+                            <summary>Jellyfin</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="notif-new" checked>
+                                    <div><span data-i18n="notif.newcontent">Notificar nuevo contenido agregado</span></div>
+                                </label>
+                                <label class="jf-check-row"><input type="checkbox" id="notif-kid">
+                                    <div><span data-i18n="notif.kidcontent">Notificación específica para contenido KID</span></div>
+                                </label>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary>Discord</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="discord-enabled"> <span>Enviar notificaciones a Discord</span></label>
+                                <div class="jf-form-group">
+                                    <label>Webhook URL</label>
+                                    <input type="url" id="discord-webhook" class="emby-input" placeholder="https://discord.com/api/webhooks/...">
+                                </div>
+                                <button class="emby-button" id="btn-test-discord">🧪 Probar Discord</button>
+                            </div>
+                        </details>
+
+                        <details class="jf-acc">
+                            <summary>Telegram</summary>
+                            <div class="jf-acc-body">
+                                <label class="jf-check-row"><input type="checkbox" id="telegram-enabled"> <span>Enviar notificaciones a Telegram</span></label>
+                                <div class="jf-form-group">
+                                    <label>Bot Token</label>
+                                    <input type="password" id="telegram-token" class="emby-input" placeholder="123456:ABC-DEF...">
+                                </div>
+                                <div class="jf-form-group">
+                                    <label>Chat ID</label>
+                                    <input type="text" id="telegram-chatid" class="emby-input" placeholder="-100...">
+                                </div>
+                                <button class="emby-button" id="btn-test-telegram">🧪 Probar Telegram</button>
+                            </div>
+                        </details>
+
+                        <div class="jf-actions">
+                            <button class="emby-button button-submit jf-btn-save" data-module="notif">💾 Guardar</button>
+                        </div>
+                    </div><!-- /notif tab -->
+
+                </div><!-- /jf-main -->
+
+                <!-- ═══════════ SIDEBAR: LIVE PREVIEW ═══════════ -->
+                <div class="jf-sidebar">
+                    <h4 class="jf-sidebar-title">Vista previa</h4>
+                    <input type="text" id="preview-search" class="emby-input" placeholder="Buscar película...">
+                    <div class="jf-preview-area" id="preview-area">
+                        <p class="jf-hint" style="text-align:center;padding:20px">Escribe el nombre de una película para ver la vista previa con badges</p>
+                    </div>
+                    <button class="emby-button" id="btn-refresh-preview" style="width:100%;margin-top:8px">↺ Actualizar preview</button>
+
+                    <hr class="jf-hr" style="margin:16px 0">
+                    <h4 class="jf-sidebar-title">Leyenda</h4>
+                    <div class="jf-legend">
+                        <div><span class="jf-badge jf-badge-res">1080p</span> Resolución</div>
+                        <div><span class="jf-badge jf-badge-audio">5.1</span> Audio</div>
+                        <div><span class="jf-badge jf-badge-new">NUEVO</span> Reciente</div>
+                        <div><span class="jf-badge jf-badge-kid">KID</span> Infantil</div>
+                        <div><span class="jf-badge jf-badge-lat">🇲🇽 LAT</span> Latino</div>
+                        <div><span class="jf-badge jf-badge-sub">SUB</span> Subtitulado</div>
+                    </div>
+                </div>
+
+            </div><!-- /jf-body -->
+        </div><!-- /content-primary -->
+    </div><!-- /content -->
+
+    <!-- Toast notifications -->
+    <div id="jf-toast" class="jf-toast" style="display:none"></div>
+
+</div><!-- /page -->
+
+<link rel="stylesheet" href="/jellyfusion/css">
+<script src="/jellyfusion/script"></script>
+</body>
+</html>

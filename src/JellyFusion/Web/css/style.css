@@ -1,0 +1,302 @@
+/* JellyFusion — Configuration page styles */
+
+/* ── Header ─────────────────────────────────────── */
+.jf-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 0 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 0;
+}
+.jf-logo {
+    width: 36px; height: 36px;
+    background: #00a4dc;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+}
+.jf-title  { font-size: 20px; font-weight: 500; margin: 0; }
+.jf-subtitle { font-size: 12px; color: #888; margin: 2px 0 0; }
+.jf-header-right {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 8px;
+}
+
+/* ── Tabs ────────────────────────────────────────── */
+.jf-tabs {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 0;
+}
+.jf-tab {
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #999;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .15s;
+}
+.jf-tab:hover { color: #ccc; }
+.jf-tab.active { color: #00a4dc; border-bottom-color: #00a4dc; font-weight: 500; }
+
+/* ── Layout ──────────────────────────────────────── */
+.jf-body {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+.jf-main { flex: 1; min-width: 0; }
+.jf-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+.jf-panel-header h3 { font-size: 16px; font-weight: 500; margin: 0; }
+
+/* ── Accordion (details/summary) ─────────────────── */
+.jf-acc {
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+.jf-acc > summary {
+    background: #00a4dc;
+    padding: 11px 14px;
+    font-size: 13px; font-weight: 500; color: #fff;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+.jf-acc > summary::-webkit-details-marker { display: none; }
+.jf-acc > summary::before { content: '▶ '; font-size: 10px; }
+.jf-acc[open] > summary::before { content: '▼ '; }
+.jf-acc > summary:hover { background: #009acc; }
+.jf-acc-body { padding: 16px; background: rgba(255,255,255,0.02); }
+
+/* ── Form elements ───────────────────────────────── */
+.jf-form-group { margin-bottom: 12px; }
+.jf-form-group label,
+.jf-label { font-size: 12px; color: #aaa; display: block; margin-bottom: 4px; }
+.jf-form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+.jf-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.jf-hint { font-size: 11px; color: #666; margin-top: 3px; line-height: 1.5; }
+.jf-hr { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 14px 0; }
+
+/* ── Radio list ──────────────────────────────────── */
+.jf-radio-list { display: flex; flex-direction: column; gap: 8px; }
+.jf-radio-list label {
+    display: flex; align-items: flex-start; gap: 8px;
+    cursor: pointer; font-size: 13px; color: #ddd;
+}
+.jf-radio-list label b { color: #fff; margin-right: 4px; }
+.jf-radio-list label span { color: #888; font-size: 12px; }
+
+/* ── Checkbox rows ───────────────────────────────── */
+.jf-check-row {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin-bottom: 10px; cursor: pointer;
+    font-size: 13px; color: #ddd;
+}
+.jf-check-row input { margin-top: 2px; accent-color: #00a4dc; flex-shrink: 0; }
+
+/* ── Toggle switch ───────────────────────────────── */
+.jf-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #ddd; }
+.jf-toggle span {
+    position: relative; display: inline-block;
+    width: 32px; height: 18px;
+    background: #444; border-radius: 9px; transition: background .2s;
+}
+.jf-toggle input { display: none; }
+.jf-toggle input:checked + span { background: #00a4dc; }
+.jf-toggle span::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #fff; transition: transform .2s;
+}
+.jf-toggle input:checked + span::after { transform: translateX(14px); }
+
+/* ── Color picker row ────────────────────────────── */
+.jf-color-row { display: flex; align-items: center; gap: 8px; }
+.jf-color-row input[type=color] {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 5px; background: transparent; cursor: pointer; padding: 2px;
+}
+.jf-color-row .emby-input { flex: 1; }
+
+/* ── Actions bar ─────────────────────────────────── */
+.jf-actions {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.jf-btn-danger { background: rgba(180,30,30,0.15) !important; color: #e05555 !important; border-color: #5a2020 !important; }
+
+/* ── Badge order ─────────────────────────────────── */
+.jf-badge-order { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+.jf-sortable-item {
+    padding: 7px 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    font-size: 12px; color: #ccc;
+    cursor: grab; user-select: none;
+}
+.jf-sortable-item:hover { background: rgba(0,164,220,0.1); border-color: #00a4dc55; }
+
+/* ── Custom badge grid ───────────────────────────── */
+.jf-badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+}
+.jf-badge-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 8px 4px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    position: relative;
+}
+.jf-badge-item:hover { border-color: #00a4dc; }
+.jf-badge-img {
+    width: 48px; height: 28px;
+    background: #0d0d0d; border: 1px solid #2a2a2a; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 700; cursor: pointer;
+}
+.jf-badge-label { font-size: 9px; color: #888; }
+.jf-badge-reset {
+    position: absolute; top: 2px; right: 2px;
+    background: transparent; border: none; color: #555;
+    font-size: 9px; cursor: pointer; padding: 0 2px;
+}
+.jf-badge-reset:hover { color: #e05555; }
+
+/* ── Studios ─────────────────────────────────────── */
+.jf-studio-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px; margin-bottom: 6px;
+}
+.jf-studio-thumb { width: 60px; height: 32px; object-fit: contain; border-radius: 3px; }
+.jf-studio-thumb-placeholder {
+    width: 60px; height: 32px;
+    background: #1a1a1a; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #555;
+}
+.jf-studio-name { flex: 1; font-size: 13px; color: #ddd; }
+.jf-studio-actions { display: flex; gap: 4px; }
+.jf-btn-add-studio {
+    width: 100%; margin-top: 8px;
+    border: 1px dashed rgba(255,255,255,0.2) !important;
+    color: #888 !important;
+}
+.jf-btn-add-studio:hover { border-color: #00a4dc !important; color: #00a4dc !important; }
+.jf-add-studio-form {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px; padding: 16px; margin-top: 12px;
+}
+.jf-add-studio-form h4 { font-size: 14px; margin: 0 0 14px; }
+
+/* ── Themes ──────────────────────────────────────── */
+.jf-theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+.jf-theme-card { border-radius: 6px; overflow: hidden; cursor: pointer; }
+.jf-theme-card:hover { opacity: .9; }
+.jf-theme-preview {
+    height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; letter-spacing: .04em;
+}
+.jf-theme-name {
+    font-size: 11px; color: #aaa; text-align: center;
+    padding: 6px; background: rgba(0,0,0,0.4);
+}
+
+/* ── Sidebar ─────────────────────────────────────── */
+.jf-sidebar {
+    width: 220px; flex-shrink: 0;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; padding: 14px;
+    position: sticky; top: 20px;
+}
+.jf-sidebar-title { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 10px; }
+
+/* ── Live preview ────────────────────────────────── */
+.jf-preview-card {
+    display: flex; gap: 8px;
+    padding: 8px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 5px; margin-bottom: 8px;
+}
+.jf-preview-poster-wrap { position: relative; flex-shrink: 0; width: 54px; }
+.jf-preview-poster { width: 54px; height: 80px; object-fit: cover; border-radius: 4px; display: block; }
+.jf-preview-badge-overlay {
+    position: absolute; top: 3px; left: 3px;
+    display: flex; flex-direction: column; gap: 2px;
+}
+.jf-preview-badge {
+    font-size: 7px; font-weight: 700;
+    padding: 1px 4px; border-radius: 2px; line-height: 1.5;
+    white-space: nowrap;
+}
+.jf-preview-title { font-size: 12px; font-weight: 500; color: #fff; margin-bottom: 2px; }
+.jf-preview-meta  { font-size: 10px; color: #888; }
+
+/* ── Legend badges ───────────────────────────────── */
+.jf-legend { display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: #888; }
+.jf-legend > div { display: flex; align-items: center; gap: 6px; }
+.jf-badge { font-size: 8px; font-weight: 700; padding: 2px 5px; border-radius: 2px; }
+.jf-badge-res   { background: #1e3a5f; color: #6ec6ff; }
+.jf-badge-audio { background: #1e3a5f; color: #6ec6ff; }
+.jf-badge-new   { background: #1a3a1a; color: #6fcf6f; }
+.jf-badge-kid   { background: #3a2a1a; color: #f0a050; }
+.jf-badge-lat   { background: #1e1e1e; color: #ddd; border: 1px solid #444; }
+.jf-badge-sub   { background: #1a1a1a; color: #aaa; }
+
+/* ── Toast ───────────────────────────────────────── */
+.jf-toast {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    padding: 10px 18px; border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    background: #1e3a1e; color: #6fcf6f;
+    border: 1px solid #2a5a2a;
+    box-shadow: 0 4px 12px rgba(0,0,0,.4);
+    animation: jf-fadein .2s ease;
+}
+.jf-toast-error { background: #3a1e1e; color: #e05555; border-color: #5a2a2a; }
+@keyframes jf-fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 900px) {
+    .jf-body { flex-direction: column; }
+    .jf-sidebar { width: 100%; position: static; }
+    .jf-form-grid { grid-template-columns: 1fr; }
+}

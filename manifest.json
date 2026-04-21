@@ -1,0 +1,27 @@
+﻿{
+    "guid":  "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name":  "JellyFusion",
+    "description":  "All-in-one Jellyfin plugin: Netflix-style slider, quality badges (LAT/SUB/NUEVO/KID), studios, themes and notifications.",
+    "overview":  "Combines EditorS Choice and JellyTag into a single unified plugin with multi-language support.",
+    "owner":  "KOOL4",
+    "category":  "General",
+    "imageUrl":  "https://raw.githubusercontent.com/KOOL4/Jellyfusion/main/assets/logo.png",
+    "versions":  [
+                     {
+                         "version":  "1.0.1.0",
+                         "changelog":  "Jellyfin 10.10 compatibility fixes: VideoRangeType enum, InternalItemsQuery.StudioIds, PluginServiceRegistrator signature, raw-string theme CSS.",
+                         "targetAbi":  "10.10.0.0",
+                         "sourceUrl":  "https://github.com/KOOL4/Jellyfusion/releases/download/v1.0.1/JellyFusion-v1.0.1.zip",
+                         "checksum":  "966600f0184a5b1afe59536fd0e97180",
+                         "timestamp":  "2026-04-21 00:00:00"
+                     },
+                     {
+                         "version":  "1.0.0.0",
+                         "changelog":  "Initial release - Editor Choice slider, JellyTag badges (LAT/SUB/NUEVO/KID), Studios, Themes, Notifications.",
+                         "targetAbi":  "10.10.0.0",
+                         "sourceUrl":  "https://github.com/KOOL4/Jellyfusion/releases/download/v1.0.0/JellyFusion-v1.0.0.zip",
+                         "checksum":  "e136b3d6e1befe2decddecb8777f148d",
+                         "timestamp":  "2026-04-20 00:00:00"
+                     }
+                 ]
+}
