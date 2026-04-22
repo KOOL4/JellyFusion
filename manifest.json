@@ -1,0 +1,21 @@
+[
+    {
+        "guid": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "name": "JellyFusion",
+        "description": "All-in-one Jellyfin plugin: Netflix-style banner with trailers, smart badges (LAT/SUB/NUEVO/KID), configurable studios, home rails (Top 10), 7 themes, navigation shortcuts, Discord/Telegram notifications and a 4-language UI (ES/EN/PT/FR).",
+        "overview": "Reemplaza 4-5 plugins individuales con una sola instalacion. Banner con traileres TMDB, badges inteligentes, studios configurables, Top 10 rails y tema visual por plataforma.",
+        "owner": "KOOL4",
+        "category": "General",
+        "imageUrl": "https://raw.githubusercontent.com/KOOL4/JellyFusion/main/assets/logo.png",
+        "versions": [
+            {
+                "version": "2.0.0.0",
+                "changelog": "Complete rewrite from scratch. New UI with 8 tabs (Inicio, Banner, Etiquetas, Estudios, Temas, Navegacion, Notificaciones, Acerca de). Added Home rails with Top 10 from TMDB/MDBList/Trakt, Banner platform styles (Netflix/Disney+/Prime/Apple TV+), color pickers for NUEVO/KID badges, TMDB duotone studio logos by default, live previews in every tab, 4 languages (ES/EN/PT/FR), inlined single-file HTML, fresh repository.",
+                "targetAbi": "10.10.0.0",
+                "sourceUrl": "https://github.com/KOOL4/JellyFusion/releases/download/v2.0.0/JellyFusion-v2.0.0.zip",
+                "checksum": "5e180fbcd1b14071d36c0af777c532bd",
+                "timestamp": "2026-04-22T14:12:19Z"
+            }
+        ]
+    }
+]

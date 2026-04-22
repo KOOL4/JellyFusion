@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JellyFusion</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   JellyFusion v2.0.0 — Configuration UI (single-file, inlined)
+   Works inside Jellyfin's plugin page sandbox.
+   ═══════════════════════════════════════════════════════════════ */
+#JellyFusionConfigPage * { box-sizing: border-box; }
+#JellyFusionConfigPage {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--jf-fg, #e8e8e8);
+}
+#JellyFusionConfigPage .jf-container { max-width: 1180px; margin: 0 auto; padding: 20px 18px 80px; }
+
+#JellyFusionConfigPage .jf-hero {
+    background: linear-gradient(135deg, #00a4dc 0%, #aa5cc3 100%);
+    color: #fff; padding: 22px 26px; border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3); margin-bottom: 16px;
+}
+#JellyFusionConfigPage .jf-hero h1 {
+    margin: 0 0 4px; font-size: 24px; font-weight: 700; letter-spacing: -.2px;
+    display: flex; align-items: center; gap: 12px; color: #fff;
+}
+#JellyFusionConfigPage .jf-hero .jf-logo-box {
+    width: 40px; height: 40px; background: rgba(255,255,255,.18);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800;
+}
+#JellyFusionConfigPage .jf-hero .jf-subtitle { margin: 0; opacity: .92; font-size: 13px; font-weight: 500; }
+#JellyFusionConfigPage .jf-hero .jf-version-badge {
+    display: inline-block; margin-top: 8px; background: rgba(0,0,0,.25);
+    padding: 3px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: .3px;
+}
+
+/* Lang bar */
+#JellyFusionConfigPage .jf-lang-bar {
+    background: #1a1d24; border-radius: 10px; padding: 11px 14px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    border: 1px solid rgba(255,255,255,.06);
+}
+#JellyFusionConfigPage .jf-lang-bar .jf-label {
+    font-size: 11px; font-weight: 600; color: #9aa0a6; text-transform: uppercase; letter-spacing: .5px;
+}
+#JellyFusionConfigPage .jf-lang-bar .jf-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+#JellyFusionConfigPage .jf-lang-chip {
+    border: 1.5px solid rgba(255,255,255,.12); background: transparent; color: #c9cdd3;
+    padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+}
+#JellyFusionConfigPage .jf-lang-chip:hover { border-color: #00a4dc; color: #00a4dc; }
+#JellyFusionConfigPage .jf-lang-chip.jf-active { background: #00a4dc; border-color: #00a4dc; color: #fff; }
+
+/* Tabs */
+#JellyFusionConfigPage .jf-tabs {
+    display: flex; gap: 3px; background: #1a1d24; border-radius: 10px; padding: 5px; margin-bottom: 14px;
+    overflow-x: auto; border: 1px solid rgba(255,255,255,.06);
+}
+#JellyFusionConfigPage .jf-tab {
+    flex: 1; min-width: 112px; padding: 9px 10px; border: 0; background: transparent; color: #9aa0a6;
+    font-size: 12px; font-weight: 600; cursor: pointer; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap;
+}
+#JellyFusionConfigPage .jf-tab:hover { color: #00a4dc; background: rgba(0,164,220,.08); }
+#JellyFusionConfigPage .jf-tab.jf-active {
+    background: linear-gradient(135deg, #00a4dc, #0088c0); color: #fff;
+    box-shadow: 0 2px 6px rgba(0,164,220,.3);
+}
+
+/* Panel */
+#JellyFusionConfigPage .jf-panel {
+    background: #1a1d24; border-radius: 14px; padding: 22px;
+    border: 1px solid rgba(255,255,255,.06);
+}
+#JellyFusionConfigPage .jf-panel h2 {
+    margin: 0 0 4px; font-size: 20px; font-weight: 700;
+    display: flex; align-items: center; gap: 10px; color: #fff;
+}
+#JellyFusionConfigPage .jf-panel .jf-sub { color: #9aa0a6; margin: 0 0 18px; font-size: 13px; }
+#JellyFusionConfigPage .jf-section-title {
+    font-size: 12px; font-weight: 700; color: #c9cdd3; text-transform: uppercase; letter-spacing: .5px;
+    margin: 20px 0 8px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,.08);
+    display: flex; justify-content: space-between; align-items: center;
+}
+#JellyFusionConfigPage .jf-pill {
+    background: rgba(0,164,220,.15); color: #00a4dc; font-size: 9px;
+    padding: 2px 6px; border-radius: 4px; letter-spacing: .3px; text-transform: uppercase;
+}
+
+#JellyFusionConfigPage .jf-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.05); gap: 12px;
+}
+#JellyFusionConfigPage .jf-row:last-child { border-bottom: 0; }
+#JellyFusionConfigPage .jf-row .jf-info { flex: 1; padding-right: 16px; }
+#JellyFusionConfigPage .jf-row .jf-info strong { display: block; font-size: 13px; color: #fff; margin-bottom: 2px; font-weight: 600; }
+#JellyFusionConfigPage .jf-row .jf-info small { color: #9aa0a6; font-size: 11px; }
+
+/* Toggle switch */
+#JellyFusionConfigPage .jf-sw { position: relative; display: inline-block; width: 42px; height: 22px; flex-shrink: 0; }
+#JellyFusionConfigPage .jf-sw input { opacity: 0; width: 0; height: 0; }
+#JellyFusionConfigPage .jf-sw-slider {
+    position: absolute; cursor: pointer; inset: 0; background: #353842;
+    border-radius: 999px; transition: .2s;
+}
+#JellyFusionConfigPage .jf-sw-slider::before {
+    position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+    background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3);
+}
+#JellyFusionConfigPage .jf-sw input:checked + .jf-sw-slider { background: #00a4dc; }
+#JellyFusionConfigPage .jf-sw input:checked + .jf-sw-slider::before { transform: translateX(20px); }
+
+/* Controls */
+#JellyFusionConfigPage .jf-select, #JellyFusionConfigPage .jf-input {
+    padding: 7px 10px; border: 1.5px solid rgba(255,255,255,.12); border-radius: 7px;
+    font-size: 12px; font-weight: 500; background: #10131a; color: #fff;
+}
+#JellyFusionConfigPage .jf-select { min-width: 160px; cursor: pointer; }
+#JellyFusionConfigPage .jf-input { width: 200px; }
+#JellyFusionConfigPage .jf-input.jf-small { width: 80px; }
+#JellyFusionConfigPage .jf-input:focus, #JellyFusionConfigPage .jf-select:focus {
+    outline: 0; border-color: #00a4dc;
+}
+#JellyFusionConfigPage .jf-color {
+    width: 34px; height: 28px; padding: 0; border: 1.5px solid rgba(255,255,255,.12);
+    border-radius: 6px; cursor: pointer; background: transparent;
+}
+
+/* Platform / theme cards */
+#JellyFusionConfigPage .jf-platforms, #JellyFusionConfigPage .jf-themes-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px; margin-top: 12px;
+}
+#JellyFusionConfigPage .jf-platform {
+    border: 2px solid rgba(255,255,255,.08); border-radius: 10px; padding: 12px 8px;
+    text-align: center; cursor: pointer; transition: all .2s; background: #10131a;
+}
+#JellyFusionConfigPage .jf-platform:hover { border-color: #00a4dc; transform: translateY(-2px); }
+#JellyFusionConfigPage .jf-platform.jf-selected {
+    border-color: #00a4dc; background: rgba(0,164,220,.08);
+    box-shadow: 0 4px 12px rgba(0,164,220,.2);
+}
+#JellyFusionConfigPage .jf-platform .jf-pname {
+    font-size: 11px; font-weight: 700; color: #c9cdd3; margin-top: 6px;
+}
+#JellyFusionConfigPage .jf-platform .jf-pmini {
+    height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .3px;
+}
+
+#JellyFusionConfigPage .jf-theme-card {
+    border: 2.5px solid rgba(255,255,255,.08); border-radius: 12px; overflow: hidden;
+    cursor: pointer; background: #10131a;
+}
+#JellyFusionConfigPage .jf-theme-card:hover { transform: translateY(-2px); }
+#JellyFusionConfigPage .jf-theme-card.jf-selected {
+    border-color: #00a4dc; box-shadow: 0 6px 18px rgba(0,164,220,.25);
+}
+#JellyFusionConfigPage .jf-theme-preview {
+    height: 90px; position: relative; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; letter-spacing: .8px; color: #fff;
+}
+#JellyFusionConfigPage .jf-theme-preview .jf-mini-ui {
+    position: absolute; bottom: 6px; left: 6px; right: 6px; display: flex; gap: 3px;
+}
+#JellyFusionConfigPage .jf-theme-preview .jf-mini-ui span {
+    flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.35);
+}
+#JellyFusionConfigPage .jf-theme-preview .jf-mini-ui span:first-child {
+    background: rgba(255,255,255,.9); flex: .3;
+}
+#JellyFusionConfigPage .jf-theme-info {
+    padding: 8px 10px; display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 700; color: #fff;
+}
+#JellyFusionConfigPage .jf-tcheck {
+    width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.25);
+    display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px;
+}
+#JellyFusionConfigPage .jf-theme-card.jf-selected .jf-tcheck { background: #00a4dc; border-color: #00a4dc; }
+
+/* Preview cinema */
+#JellyFusionConfigPage .jf-preview-block {
+    background: linear-gradient(180deg, #050709 0%, #000 100%);
+    border-radius: 14px; padding: 18px; margin-top: 14px;
+    border: 1px solid rgba(255,255,255,.05);
+}
+#JellyFusionConfigPage .jf-preview-block .jf-ptitle {
+    color: #9aa0a6; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+#JellyFusionConfigPage .jf-live-dot {
+    width: 6px; height: 6px; background: #22c55e; border-radius: 50%;
+    box-shadow: 0 0 6px #22c55e; animation: jf-pulse 1.4s infinite;
+}
+@keyframes jf-pulse { 0%,100%{ opacity: 1 } 50%{ opacity: .3 } }
+
+/* Banner preview */
+#JellyFusionConfigPage .jf-banner-mock {
+    aspect-ratio: 21/9; border-radius: 10px; overflow: hidden; position: relative;
+    display: flex; align-items: flex-end;
+    background: linear-gradient(135deg, #1a1a2e, #0a0d11); color: #fff;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,.9) 0%, rgba(0,0,0,.2) 70%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-bg-art { position: absolute; inset: 0; }
+#JellyFusionConfigPage .jf-banner-mock .jf-content {
+    position: relative; z-index: 2; padding: 20px 28px; max-width: 60%;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-heading {
+    font-size: 10px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 6px;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-btitle {
+    font-size: 26px; font-weight: 900; letter-spacing: -.3px; line-height: 1; margin-bottom: 6px;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-bmeta {
+    font-size: 10px; color: #ccc; margin-bottom: 8px;
+    display: flex; gap: 8px; align-items: center;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-pill-meta {
+    background: rgba(255,255,255,.15); padding: 2px 6px; border-radius: 3px; font-weight: 700;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-bdesc {
+    font-size: 11px; color: #ddd; line-height: 1.5; margin-bottom: 10px; max-width: 340px;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-btns { display: flex; gap: 8px; }
+#JellyFusionConfigPage .jf-banner-mock .jf-btn-play {
+    background: #fff; color: #000; padding: 6px 14px; border-radius: 4px;
+    font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 4px;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-btn-more {
+    background: rgba(255,255,255,.2); color: #fff; padding: 6px 14px; border-radius: 4px;
+    font-size: 11px; font-weight: 700;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-dots {
+    position: absolute; bottom: 8px; right: 12px; display: flex; gap: 4px; z-index: 2;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-dots span {
+    width: 5px; height: 5px; background: rgba(255,255,255,.3); border-radius: 50%;
+}
+#JellyFusionConfigPage .jf-banner-mock .jf-dots span.jf-active { background: #fff; }
+
+/* Badge demo */
+#JellyFusionConfigPage .jf-badge-demo { display: flex; flex-wrap: wrap; gap: 10px; }
+#JellyFusionConfigPage .jf-poster {
+    width: 120px; background: #1a1a1a; border-radius: 8px; overflow: hidden;
+    position: relative; box-shadow: 0 4px 14px rgba(0,0,0,.3);
+}
+#JellyFusionConfigPage .jf-poster .jf-cover {
+    aspect-ratio: 2/3; display: flex; align-items: center; justify-content: center;
+    font-size: 32px; background: linear-gradient(135deg, #3a3a3a, #1f1f1f); color: #666;
+}
+#JellyFusionConfigPage .jf-poster .jf-tags-stack {
+    position: absolute; top: 6px; right: 6px; display: flex; flex-direction: column;
+    gap: 3px; align-items: flex-end;
+}
+#JellyFusionConfigPage .jf-poster .jf-tags-stack.jf-horizontal { flex-direction: row; }
+#JellyFusionConfigPage .jf-poster .jf-tags-stack.jf-tl { top: 6px; left: 6px; right: auto; }
+#JellyFusionConfigPage .jf-poster .jf-tags-stack.jf-bl { top: auto; bottom: 6px; left: 6px; right: auto; }
+#JellyFusionConfigPage .jf-poster .jf-tags-stack.jf-br { top: auto; bottom: 6px; right: 6px; }
+#JellyFusionConfigPage .jf-poster .jf-nuevo {
+    position: absolute; top: 6px; left: 6px; font-size: 8px; font-weight: 800;
+    padding: 2px 6px; border-radius: 3px; letter-spacing: .5px;
+}
+#JellyFusionConfigPage .jf-poster .jf-kid {
+    position: absolute; bottom: 6px; left: 6px; font-size: 8px; font-weight: 800;
+    padding: 2px 6px; border-radius: 3px; letter-spacing: .5px;
+}
+#JellyFusionConfigPage .jf-poster .jf-badge-row {
+    display: flex; align-items: center; gap: 3px;
+    background: rgba(0,0,0,.72); padding: 2px 5px; border-radius: 3px;
+}
+#JellyFusionConfigPage .jf-poster .jf-badge-row .jf-flag-box {
+    width: 14px; height: 10px; border-radius: 2px; font-size: 9px;
+    display: inline-flex; align-items: center; justify-content: center; overflow: hidden;
+}
+#JellyFusionConfigPage .jf-poster .jf-badge-row .jf-badge-txt {
+    font-size: 8px; font-weight: 800; color: #fff; letter-spacing: .4px;
+}
+#JellyFusionConfigPage .jf-poster .jf-caption {
+    font-size: 9px; color: #aaa; padding: 4px 6px; text-align: center;
+}
+
+/* Studios */
+#JellyFusionConfigPage .jf-studios-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 8px; margin-top: 10px;
+}
+#JellyFusionConfigPage .jf-studio-card {
+    position: relative; height: 82px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid transparent; cursor: pointer; color: #fff;
+    font-weight: 800; font-size: 14px; letter-spacing: .8px;
+}
+#JellyFusionConfigPage .jf-studio-card:hover {
+    transform: translateY(-2px) scale(1.02); border-color: rgba(255,255,255,.35);
+}
+#JellyFusionConfigPage .jf-studio-card .jf-dot {
+    position: absolute; top: 5px; right: 5px; width: 18px; height: 18px;
+    background: rgba(0,0,0,.5); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 10px;
+}
+#JellyFusionConfigPage .jf-add-studio {
+    border: 2px dashed rgba(255,255,255,.15); background: transparent; color: #9aa0a6;
+    height: 82px; border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; gap: 2px;
+}
+#JellyFusionConfigPage .jf-add-studio:hover {
+    border-color: #00a4dc; color: #00a4dc; background: rgba(0,164,220,.05);
+}
+#JellyFusionConfigPage .jf-add-studio .jf-plus { font-size: 22px; line-height: 1; font-weight: 300; }
+#JellyFusionConfigPage .jf-add-studio .jf-t { font-size: 10px; font-weight: 600; }
+#JellyFusionConfigPage .jf-studios-scroll {
+    display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;
+}
+#JellyFusionConfigPage .jf-studios-scroll .jf-sitem {
+    flex: 1 1 0; min-width: 120px; height: 64px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 12px; letter-spacing: .6px;
+}
+
+/* Home rails */
+#JellyFusionConfigPage .jf-rail-list {
+    margin-top: 10px; background: #10131a; border-radius: 10px; padding: 8px;
+    border: 1px solid rgba(255,255,255,.05);
+}
+#JellyFusionConfigPage .jf-rail-row {
+    display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+    background: #1a1d24; border-radius: 7px; margin-bottom: 6px;
+    border: 1px solid rgba(255,255,255,.05);
+}
+#JellyFusionConfigPage .jf-rail-row:last-child { margin-bottom: 0; }
+#JellyFusionConfigPage .jf-rail-handle { color: #9aa0a6; cursor: grab; font-size: 14px; font-weight: 800; user-select: none; }
+#JellyFusionConfigPage .jf-rail-ico {
+    width: 28px; height: 28px; border-radius: 7px; background: rgba(0,164,220,.1);
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+#JellyFusionConfigPage .jf-rail-name { flex: 1; font-size: 12px; font-weight: 600; color: #fff; }
+#JellyFusionConfigPage .jf-rail-sub { font-size: 10px; color: #9aa0a6; font-weight: 500; }
+
+#JellyFusionConfigPage .jf-home-mock { background: #050709; border-radius: 10px; padding: 14px 10px; }
+#JellyFusionConfigPage .jf-home-rail { margin-bottom: 16px; }
+#JellyFusionConfigPage .jf-home-rail:last-child { margin-bottom: 0; }
+#JellyFusionConfigPage .jf-rail-title {
+    color: #fff; font-size: 12px; font-weight: 700; margin: 0 4px 8px;
+    display: flex; align-items: center; gap: 6px;
+}
+#JellyFusionConfigPage .jf-rail-badge {
+    background: #00a4dc; color: #fff; font-size: 8px;
+    padding: 1px 5px; border-radius: 3px; letter-spacing: .3px;
+}
+#JellyFusionConfigPage .jf-rail-items { display: flex; gap: 6px; overflow-x: auto; padding: 0 4px 4px; }
+#JellyFusionConfigPage .jf-rail-item {
+    flex: 0 0 auto; width: 80px; aspect-ratio: 2/3; border-radius: 5px;
+    background: linear-gradient(135deg, #2a2a3a, #1a1a2a); position: relative; overflow: hidden;
+}
+#JellyFusionConfigPage .jf-rail-item.jf-top10 {
+    width: 140px; aspect-ratio: unset; height: 100px;
+    display: flex; align-items: center; padding-left: 40px;
+    font-size: 28px; font-weight: 900; color: #fff; text-shadow: 2px 2px 0 #000;
+}
+#JellyFusionConfigPage .jf-rail-item.jf-top10 .jf-num {
+    position: absolute; left: 4px; top: -6px; font-size: 64px; font-weight: 900;
+    color: rgba(255,255,255,.15); line-height: 1; font-style: italic;
+}
+#JellyFusionConfigPage .jf-rail-item.jf-cat {
+    aspect-ratio: 16/9; height: 70px; width: auto; min-width: 130px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 13px; letter-spacing: .8px;
+}
+
+/* Nav preview */
+#JellyFusionConfigPage .jf-nav-preview-bar {
+    display: flex; gap: 18px; padding: 12px 16px; background: #050709; border-radius: 8px;
+}
+#JellyFusionConfigPage .jf-nav-item {
+    color: #aaa; font-size: 13px; font-weight: 600; cursor: pointer; padding: 3px 2px;
+}
+#JellyFusionConfigPage .jf-nav-item:hover { color: #fff; }
+#JellyFusionConfigPage .jf-nav-item.jf-active { color: #00a4dc; border-bottom: 2px solid #00a4dc; padding-bottom: 1px; }
+
+/* Notif preview */
+#JellyFusionConfigPage .jf-notif-mock {
+    background: #36393f; border-radius: 8px; padding: 12px 14px;
+    color: #dcddde; font-size: 12px; border-left: 4px solid #00a4dc;
+}
+#JellyFusionConfigPage .jf-notif-mock .jf-nhead { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+#JellyFusionConfigPage .jf-notif-mock .jf-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #00a4dc, #aa5cc3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #fff;
+}
+#JellyFusionConfigPage .jf-notif-mock .jf-nname { font-weight: 700; font-size: 13px; color: #fff; }
+#JellyFusionConfigPage .jf-notif-mock .jf-ntime { color: #72767d; font-size: 10px; }
+#JellyFusionConfigPage .jf-notif-mock .jf-nbody strong { color: #fff; }
+
+/* About */
+#JellyFusionConfigPage .jf-about-card {
+    background: linear-gradient(135deg, rgba(0,164,220,.08), rgba(170,92,195,.08));
+    border: 1px solid rgba(0,164,220,.2); border-radius: 12px; padding: 16px; margin-top: 14px;
+}
+#JellyFusionConfigPage .jf-about-card h3 { margin: 0 0 6px; font-size: 16px; color: #fff; }
+#JellyFusionConfigPage .jf-about-card p { margin: 0 0 10px; font-size: 12px; color: #9aa0a6; }
+#JellyFusionConfigPage .jf-about-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px; margin-top: 10px;
+}
+#JellyFusionConfigPage .jf-about-item {
+    background: #10131a; border: 1px solid rgba(255,255,255,.06);
+    border-radius: 8px; padding: 10px 12px;
+}
+#JellyFusionConfigPage .jf-about-item .jf-akey {
+    font-size: 10px; color: #9aa0a6; text-transform: uppercase;
+    letter-spacing: .4px; font-weight: 700; margin-bottom: 2px;
+}
+#JellyFusionConfigPage .jf-about-item .jf-aval { font-size: 12px; color: #fff; font-weight: 600; }
+#JellyFusionConfigPage .jf-module-chip {
+    display: inline-block; padding: 3px 8px;
+    background: rgba(0,164,220,.15); color: #00a4dc;
+    border: 1px solid rgba(0,164,220,.3); border-radius: 999px;
+    font-size: 11px; font-weight: 600; margin: 2px;
+}
+
+/* Buttons */
+#JellyFusionConfigPage .jf-btn {
+    padding: 9px 18px; border: 0; border-radius: 7px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+}
+#JellyFusionConfigPage .jf-btn-primary { background: #00a4dc; color: #fff; }
+#JellyFusionConfigPage .jf-btn-primary:hover { background: #0088c0; }
+#JellyFusionConfigPage .jf-btn-ghost { background: transparent; color: #9aa0a6; }
+#JellyFusionConfigPage .jf-btn-ghost:hover { background: rgba(255,255,255,.05); color: #fff; }
+#JellyFusionConfigPage .jf-actions {
+    display: flex; gap: 10px; justify-content: flex-end;
+    margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.08);
+}
+#JellyFusionConfigPage .jf-callout {
+    background: rgba(245,158,11,.1); border-left: 3px solid #f59e0b;
+    padding: 10px 12px; border-radius: 5px; margin-top: 12px;
+    font-size: 11px; color: #fbbf24;
+}
+#JellyFusionConfigPage .jf-callout.jf-info {
+    background: rgba(59,130,246,.1); border-color: #3b82f6; color: #93c5fd;
+}
+
+/* Toast */
+#JellyFusionConfigPage .jf-toast {
+    position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+    padding: 12px 18px; border-radius: 8px;
+    background: #22c55e; color: #fff; font-weight: 600; font-size: 13px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3);
+    opacity: 0; transform: translateY(10px); transition: all .2s;
+}
+#JellyFusionConfigPage .jf-toast.jf-show { opacity: 1; transform: translateY(0); }
+#JellyFusionConfigPage .jf-toast.jf-error { background: #ef4444; }
+
+@media (max-width: 600px) {
+    #JellyFusionConfigPage .jf-tabs { overflow-x: scroll; }
+    #JellyFusionConfigPage .jf-tab { min-width: 100px; font-size: 11px; }
+    #JellyFusionConfigPage .jf-hero { padding: 16px; }
+    #JellyFusionConfigPage .jf-hero h1 { font-size: 20px; }
+    #JellyFusionConfigPage .jf-panel { padding: 14px; }
+    #JellyFusionConfigPage .jf-banner-mock .jf-btitle { font-size: 18px; }
+    #JellyFusionConfigPage .jf-banner-mock .jf-content { padding: 12px 16px; max-width: 75%; }
+}
+</style>
+</head>
+<body>
+<div id="JellyFusionConfigPage" data-role="page" class="page type-interior pluginConfigurationPage">
+
+<!-- Defensive boot trigger: <img onload> fires even when Jellyfin injects
+     the plugin page via innerHTML (which kills normal <script> execution). -->
+<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt=""
+     style="display:none;width:0;height:0"
+     onload="(function(){if(window.__jfBootRequested)return;window.__jfBootRequested=true;var t=0;var iv=setInterval(function(){t+=50;var page=document.getElementById('JellyFusionConfigPage');var src=document.querySelector('script[data-jf-main]');if(page){clearInterval(iv);if(window.__jfInit){window.__jfInit();}else if(src&&!src.__jfReinjected){src.__jfReinjected=true;try{var ns=document.createElement('script');ns.textContent=src.textContent;document.head.appendChild(ns);}catch(e){console.error('JellyFusion boot error:',e);}}}else if(t>8000){clearInterval(iv);}},50);})()">
+
+<div class="jf-container">
+
+    <div class="jf-hero">
+        <h1><span class="jf-logo-box">JF</span><span>JellyFusion</span></h1>
+        <p class="jf-subtitle" id="jf-subtitle">Plugin todo-en-uno para Jellyfin</p>
+        <span class="jf-version-badge">v2.0.0</span>
+    </div>
+
+    <div class="jf-lang-bar">
+        <span class="jf-label" id="jf-lang-label">Idioma</span>
+        <div class="jf-chips" id="jf-lang-chips"></div>
+    </div>
+
+    <div class="jf-tabs" id="jf-tabs"></div>
+    <div id="jf-panels"></div>
+
+    <div class="jf-actions">
+        <button type="button" class="jf-btn jf-btn-ghost" id="jf-btn-cancel">Cancelar</button>
+        <button type="button" class="jf-btn jf-btn-primary" id="jf-btn-save">Guardar cambios</button>
+    </div>
+
+</div>
+</div>
+
+<script data-jf-main="1">
+/* ═══════════════════════════════════════════════════════════════
+   JellyFusion v2.0.0 — Client-side UI (inlined)
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+"use strict";
+
+// ====== i18n (4 languages) ======
+var I18N = {
+  es:{ subtitle:"Plugin todo-en-uno · Banner · Etiquetas · Estudios · Inicio · Temas · Navegación · Notificaciones",
+       langLabel:"Idioma de la interfaz", save:"Guardar cambios", cancel:"Cancelar",
+       savedOk:"Configuración guardada", savedErr:"Error al guardar la configuración", loadErr:"Error al cargar la configuración",
+       tabs:{home:"Inicio",banner:"Banner",tags:"Etiquetas",studios:"Estudios",themes:"Temas",nav:"Navegación",notif:"Notificaciones",about:"Acerca de"} },
+  en:{ subtitle:"All-in-one plugin · Banner · Tags · Studios · Home · Themes · Navigation · Notifications",
+       langLabel:"Interface language", save:"Save changes", cancel:"Cancel",
+       savedOk:"Settings saved", savedErr:"Error saving settings", loadErr:"Error loading settings",
+       tabs:{home:"Home",banner:"Banner",tags:"Tags",studios:"Studios",themes:"Themes",nav:"Navigation",notif:"Notifications",about:"About"} },
+  pt:{ subtitle:"Plugin tudo-em-um · Banner · Etiquetas · Estúdios · Início · Temas · Navegação · Notificações",
+       langLabel:"Idioma da interface", save:"Salvar alterações", cancel:"Cancelar",
+       savedOk:"Configurações salvas", savedErr:"Erro ao salvar", loadErr:"Erro ao carregar",
+       tabs:{home:"Início",banner:"Banner",tags:"Etiquetas",studios:"Estúdios",themes:"Temas",nav:"Navegação",notif:"Notificações",about:"Sobre"} },
+  fr:{ subtitle:"Extension tout-en-un · Bannière · Tags · Studios · Accueil · Thèmes · Navigation · Notifications",
+       langLabel:"Langue de l'interface", save:"Enregistrer", cancel:"Annuler",
+       savedOk:"Paramètres enregistrés", savedErr:"Erreur d'enregistrement", loadErr:"Erreur de chargement",
+       tabs:{home:"Accueil",banner:"Bannière",tags:"Tags",studios:"Studios",themes:"Thèmes",nav:"Navigation",notif:"Notifs",about:"À propos"} }
+};
+
+var LANGS = [
+    { code:"es", label:"Español (LAT)", flag:"🇲🇽" },
+    { code:"en", label:"English",       flag:"🇺🇸" },
+    { code:"pt", label:"Português",     flag:"🇧🇷" },
+    { code:"fr", label:"Français",      flag:"🇫🇷" }
+];
+
+var THEMES = [
+    { id:"Default",       name:"— Por defecto —", bg:"linear-gradient(135deg,#1f2937,#111827)", primary:"#00a4dc" },
+    { id:"Netflix",       name:"Netflix",         bg:"linear-gradient(135deg,#e50914,#1a0000)", primary:"#e50914" },
+    { id:"PrimeVideo",    name:"Prime Video",     bg:"linear-gradient(135deg,#00a8e1,#002e47)", primary:"#00a8e1" },
+    { id:"DisneyPlus",    name:"Disney+",         bg:"linear-gradient(135deg,#1a237e,#0c1b3a)", primary:"#0063e5" },
+    { id:"AppleTvPlus",   name:"Apple TV+",       bg:"linear-gradient(135deg,#000,#1d1d1f)",    primary:"#ffffff" },
+    { id:"Crunchyroll",   name:"Crunchyroll",     bg:"linear-gradient(135deg,#f47521,#231f20)", primary:"#f47521" },
+    { id:"ParamountPlus", name:"Paramount+",      bg:"linear-gradient(135deg,#0064ff,#001a4a)", primary:"#0064ff" }
+];
+
+var PLATFORMS = [
+    { id:"netflix", name:"Netflix",   bg:"linear-gradient(135deg,#e50914,#1a0000)" },
+    { id:"disney",  name:"Disney+",   bg:"linear-gradient(135deg,#1a237e,#0c1b3a)" },
+    { id:"prime",   name:"Prime",     bg:"linear-gradient(135deg,#00a8e1,#002e47)" },
+    { id:"apple",   name:"Apple TV+", bg:"linear-gradient(135deg,#000,#1d1d1f)" }
+];
+
+var RAILS_META = {
+    "studios":           { ico:"🏛️", name:"Estudios",              sub:"Cards clickeables bajo el banner (primero)" },
+    "continueWatching":  { ico:"▶️", name:"Continuar viendo",      sub:"Jellyfin nativo · tu progreso actual" },
+    "top10Series":       { ico:"📺", name:"Top 10 Series hoy",     sub:"Requiere fuente de datos" },
+    "top10Movies":       { ico:"🎥", name:"Top 10 Películas hoy",  sub:"Requiere fuente de datos" },
+    "becauseYouWatched": { ico:"🔄", name:"Porque viste «…»",      sub:"Basado en tu historial" },
+    "newReleases":       { ico:"🆕", name:"Recién añadido",        sub:"Lo último en tu biblioteca" },
+    "categories":        { ico:"🎭", name:"Explora por género",    sub:"Acción, Comedia, Terror, Animación…" },
+    "recommended":       { ico:"⭐", name:"Recomendado para ti",   sub:"Historial + rating + popularidad" },
+    "upcoming":          { ico:"📅", name:"Próximos estrenos",     sub:"TMDB upcoming en tu región" }
+};
+
+var FLAGS = { mx:"🇲🇽", es:"🇪🇸", ar:"🇦🇷", cl:"🇨🇱", co:"🇨🇴", pe:"🇵🇪", us:"🇺🇸" };
+
+// ====== State ======
+var currentLang = "es";
+var currentTab  = "home";
+var config = null;       // loaded from server
+var originalConfig = null; // for cancel
+
+function t(path){
+    var parts = path.split(".");
+    var v = I18N[currentLang];
+    for (var i = 0; i < parts.length; i++) { v = v && v[parts[i]]; if (v === undefined) return path; }
+    return v;
+}
+
+// ====== API ======
+function apiBase(){ return ApiClient ? ApiClient.serverAddress() : ""; }
+function apiHeaders(){
+    var h = { "Content-Type":"application/json" };
+    if (typeof ApiClient !== "undefined" && ApiClient.accessToken){
+        h["X-Emby-Token"] = ApiClient.accessToken();
+    }
+    return h;
+}
+function loadConfig(){
+    return fetch(apiBase() + "/jellyfusion/config", { headers: apiHeaders() })
+        .then(function(r){ if (!r.ok) throw new Error("HTTP "+r.status); return r.json(); });
+}
+function saveConfig(cfg){
+    return fetch(apiBase() + "/jellyfusion/config", {
+        method: "POST", headers: apiHeaders(), body: JSON.stringify(cfg)
+    }).then(function(r){ if (!r.ok) throw new Error("HTTP "+r.status); });
+}
+
+// ====== Toast ======
+function toast(msg, isError){
+    var existing = document.querySelector("#JellyFusionConfigPage .jf-toast");
+    if (existing) existing.remove();
+    var el = document.createElement("div");
+    el.className = "jf-toast" + (isError?" jf-error":"");
+    el.textContent = msg;
+    document.getElementById("JellyFusionConfigPage").appendChild(el);
+    requestAnimationFrame(function(){ el.classList.add("jf-show"); });
+    setTimeout(function(){ el.classList.remove("jf-show"); setTimeout(function(){ el.remove(); }, 300); }, 2500);
+}
+
+// ====== Helpers ======
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+function row(title, desc, ctrl){
+    return '<div class="jf-row"><div class="jf-info"><strong>'+esc(title)+'</strong><small>'+esc(desc||"")+'</small></div>'+ctrl+'</div>';
+}
+function toggle(id, checked){
+    return '<label class="jf-sw"><input type="checkbox" id="'+id+'"'+(checked?" checked":"")+'><span class="jf-sw-slider"></span></label>';
+}
+function sel(id, opts, cur){
+    var html = '<select class="jf-select" id="'+id+'">';
+    for (var i = 0; i < opts.length; i++){
+        html += '<option value="'+esc(opts[i].v)+'"'+(opts[i].v===cur?' selected':'')+'>'+esc(opts[i].l)+'</option>';
+    }
+    return html + '</select>';
+}
+function inp(id, val, type, cls){
+    return '<input class="jf-input '+(cls||"jf-small")+'" id="'+id+'" type="'+(type||"text")+'" value="'+esc(val==null?"":val)+'">';
+}
+function inpTxt(id, val, placeholder){
+    return '<input class="jf-input" id="'+id+'" type="text" value="'+esc(val||"")+'" placeholder="'+esc(placeholder||"")+'">';
+}
+function inpPwd(id, val, placeholder){
+    return '<input class="jf-input" id="'+id+'" type="password" value="'+esc(val||"")+'" placeholder="'+esc(placeholder||"")+'">';
+}
+
+// ====== Lang / Tabs ======
+function renderLangs(){
+    var c = document.getElementById("jf-lang-chips"); if (!c) return;
+    c.innerHTML = "";
+    for (var i = 0; i < LANGS.length; i++){
+        var l = LANGS[i];
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "jf-lang-chip" + (l.code===currentLang?" jf-active":"");
+        b.innerHTML = '<span class="jf-flag">'+l.flag+'</span>'+esc(l.label);
+        (function(code){ b.onclick = function(){ currentLang = code; if (config) config.Language = code; renderAll(); }; })(l.code);
+        c.appendChild(b);
+    }
+}
+function renderTabs(){
+    var defs = [
+        {id:"home",    ico:"🏠",  k:"home"},
+        {id:"banner",  ico:"🎬",  k:"banner"},
+        {id:"tags",    ico:"🏷️",  k:"tags"},
+        {id:"studios", ico:"🏛️",  k:"studios"},
+        {id:"themes",  ico:"🎨",  k:"themes"},
+        {id:"nav",     ico:"🧭",  k:"nav"},
+        {id:"notif",   ico:"🔔",  k:"notif"},
+        {id:"about",   ico:"ℹ️",  k:"about"}
+    ];
+    var t0 = document.getElementById("jf-tabs"); if (!t0) return;
+    t0.innerHTML = "";
+    for (var i = 0; i < defs.length; i++){
+        var d = defs[i];
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "jf-tab" + (d.id===currentTab?" jf-active":"");
+        b.innerHTML = '<span>'+d.ico+'</span><span>'+esc(t("tabs."+d.k))+'</span>';
+        (function(id){ b.onclick = function(){ currentTab = id; renderAll(); }; })(d.id);
+        t0.appendChild(b);
+    }
+}
+
+// ====== HOME TAB ======
+function renderHome(){
+    var H = config.Home;
+    var srcOpts = [
+        {v:"Local",   l:"Solo Jellyfin (sin API)"},
+        {v:"TMDB",    l:"TMDB — trending oficial"},
+        {v:"MDBList", l:"MDBList — listas y top"},
+        {v:"Trakt",   l:"Trakt.tv — tendencias"}
+    ];
+    var railsHtml = "";
+    for (var i = 0; i < H.Rails.length; i++){
+        var r = H.Rails[i];
+        var m = RAILS_META[r.Id] || { ico:"•", name:r.Id, sub:"" };
+        railsHtml += '<div class="jf-rail-row" data-rail-idx="'+i+'">'+
+            '<span class="jf-rail-handle">⋮⋮</span>'+
+            '<div class="jf-rail-ico">'+m.ico+'</div>'+
+            '<div style="flex:1"><div class="jf-rail-name">'+esc(m.name)+'</div><div class="jf-rail-sub">'+esc(m.sub)+'</div></div>'+
+            '<label class="jf-sw"><input type="checkbox" data-rail-toggle="'+r.Id+'"'+(r.Enabled?" checked":"")+'><span class="jf-sw-slider"></span></label>'+
+            '</div>';
+    }
+
+    return '<div class="jf-panel">' +
+        '<h2>🏠 Página de inicio</h2>' +
+        '<p class="jf-sub">Orden de los rails bajo el banner · primera fila siempre = Estudios (por spec)</p>' +
+
+        '<div class="jf-section-title">Fuente de datos <span class="jf-pill">opcional</span></div>' +
+        '<div class="jf-callout jf-info">Top 10, trending y "porque viste X" requieren una fuente externa. Con Local, JellyFusion usa tu biblioteca + historial de reproducción.</div>' +
+        row("Fuente principal", "", sel("jf-dataSource", srcOpts, H.DataSource)) +
+        row("TMDB API key",    "https://www.themoviedb.org/settings/api", inpPwd("jf-tmdbKey",    H.TmdbApiKey,   "abc123...")) +
+        row("MDBList API key", "https://mdblist.com/preferences",         inpPwd("jf-mdblistKey", H.MdbListApiKey,"abc123...")) +
+        row("Trakt.tv API key","https://trakt.tv/oauth/applications",     inpPwd("jf-traktKey",   H.TraktApiKey,  "abc123...")) +
+
+        '<div class="jf-section-title">Rails disponibles <span class="jf-pill">arrastra para reordenar</span></div>' +
+        '<div class="jf-rail-list">'+railsHtml+'</div>' +
+
+        '<div class="jf-preview-block">' +
+            '<div class="jf-ptitle"><span class="jf-live-dot"></span>Vista en vivo · fuente: '+esc(H.DataSource)+'</div>' +
+            renderHomePreview() +
+        '</div>' +
+    '</div>';
+}
+function renderHomePreview(){
+    var H = config.Home;
+    var studios = config.Studios.Items || [];
+    var enabled = H.Rails.filter(function(r){ return r.Enabled; });
+    if (!enabled.length) return '<div style="color:#9aa0a6;text-align:center;padding:30px 0;font-size:12px">Ningún rail activado — la home quedaría vacía</div>';
+    var html = '<div class="jf-home-mock">';
+    for (var i = 0; i < enabled.length; i++){
+        var id = enabled[i].Id;
+        if (id === "studios"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">'+esc(config.Studios.SectionTitle||"Estudios")+'</div><div class="jf-rail-items">';
+            for (var j = 0; j < studios.length && j < 6; j++){
+                html += '<div class="jf-rail-item jf-cat" style="background:'+esc(studios[j].Gradient||"#222")+'">'+esc(studios[j].Name)+'</div>';
+            }
+            html += '</div></div>';
+        } else if (id === "continueWatching"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Continuar viendo</div><div class="jf-rail-items">' + repeatItem(5) + '</div></div>';
+        } else if (id === "top10Series"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Top 10 Series hoy <span class="jf-rail-badge">'+esc(H.DataSource)+'</span></div><div class="jf-rail-items">' + top10(5,"S") + '</div></div>';
+        } else if (id === "top10Movies"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Top 10 Películas hoy <span class="jf-rail-badge">'+esc(H.DataSource)+'</span></div><div class="jf-rail-items">' + top10(5,"P") + '</div></div>';
+        } else if (id === "becauseYouWatched"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Porque viste «Breaking Bad»</div><div class="jf-rail-items">' + repeatItem(6) + '</div></div>';
+        } else if (id === "newReleases"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Recién añadido</div><div class="jf-rail-items">' + repeatItem(6) + '</div></div>';
+        } else if (id === "categories"){
+            var cats = ["TERROR","COMEDIA","ACCIÓN","DRAMA","ANIME","INFANTIL"];
+            var inner = "";
+            for (var k = 0; k < cats.length; k++)
+                inner += '<div class="jf-rail-item jf-cat" style="background:linear-gradient(135deg,#2a1a3a,#1a1a2a)">'+cats[k]+'</div>';
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Explora por género</div><div class="jf-rail-items">'+inner+'</div></div>';
+        } else if (id === "recommended"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Recomendado para ti ⭐</div><div class="jf-rail-items">' + repeatItem(5) + '</div></div>';
+        } else if (id === "upcoming"){
+            html += '<div class="jf-home-rail"><div class="jf-rail-title">Próximos estrenos <span class="jf-rail-badge">'+esc(H.DataSource)+'</span></div><div class="jf-rail-items">' + repeatItem(4) + '</div></div>';
+        }
+    }
+    return html + '</div>';
+}
+function repeatItem(n){ var s=""; for(var i=0;i<n;i++) s+='<div class="jf-rail-item"></div>'; return s; }
+function top10(n, pre){ var s=""; for(var i=1;i<=n;i++) s+='<div class="jf-rail-item jf-top10"><span class="jf-num">'+i+'</span>'+pre+i+'</div>'; return s; }
+
+// ====== BANNER TAB ======
+function renderBanner(){
+    var S = config.Slider;
+    var modeOpts  = [{v:"Random",l:"Aleatorio"},{v:"Favourites",l:"Favoritos"},{v:"Collections",l:"Colecciones"},{v:"New",l:"Recién añadidos"}];
+    var langOpts  = [{v:"Auto",l:"Automático"},{v:"es-419",l:"Español LAT"},{v:"es-ES",l:"Español ES"},{v:"en",l:"English"},{v:"pt",l:"Português"},{v:"fr",l:"Français"},{v:"sub",l:"Subtitulado"}];
+    var srcOpts   = [{v:"TMDB",l:"TMDB (recomendado)"},{v:"YouTube",l:"YouTube"},{v:"Local",l:"Local"}];
+    var heightOpts= [{v:"Small",l:"Pequeño"},{v:"Medium",l:"Mediano"},{v:"Large",l:"Grande"},{v:"Fullscreen",l:"Pantalla completa"}];
+    var transOpts = [{v:"Slide",l:"Deslizar"},{v:"Fade",l:"Desvanecer"},{v:"Zoom",l:"Zoom"}];
+    var posOpts   = [{v:"Top",l:"Arriba"},{v:"Center",l:"Centro"},{v:"Bottom",l:"Abajo"}];
+
+    var platHtml = "";
+    for (var i = 0; i < PLATFORMS.length; i++){
+        var p = PLATFORMS[i];
+        platHtml += '<div class="jf-platform'+(S.PlatformStyle===p.id?" jf-selected":"")+'" data-platform="'+p.id+'">'+
+            '<div class="jf-pmini" style="background:'+p.bg+'">'+esc(p.name)+'</div>'+
+            '<div class="jf-pname">'+esc(p.name)+'</div></div>';
+    }
+
+    return '<div class="jf-panel">' +
+        '<h2>🎬 Banner principal (Netflix-style)</h2>' +
+        '<p class="jf-sub">Slider destacado con tráileres automáticos · heredado de EditorsChoice</p>' +
+
+        '<div class="jf-section-title">Básico</div>' +
+        row("Habilitar banner","Muestra el slider en la página de inicio",toggle("jf-bannerEnabled",S.Enabled)) +
+        row("Modo de selección","",sel("jf-mode",modeOpts,S.Mode)) +
+        row("Encabezado personalizado","Texto arriba del título",inpTxt("jf-bannerHeading",S.BannerHeading,"ej: Lo destacado")) +
+        row("Items máximos","",inp("jf-maxItems",S.MaxItems,"number")) +
+
+        '<div class="jf-section-title">Reproducción</div>' +
+        row("Autoplay","",toggle("jf-autoplay",S.AutoplayEnabled)) +
+        row("Intervalo (segundos)","",inp("jf-interval",S.AutoplayInterval,"number")) +
+        row("Efecto de transición","",sel("jf-transition",transOpts,S.TransitionEffect)) +
+
+        '<div class="jf-section-title">Filtrado</div>' +
+        row("Rating mínimo comunidad","0–10 (0 = sin filtro)",'<input class="jf-input jf-small" id="jf-minRating" type="number" step="0.1" min="0" max="10" value="'+esc(S.MinCommunityRating)+'">') +
+        row("Mostrar ya vistos","",toggle("jf-showPlayed",S.ShowPlayedItems)) +
+        row("Ocultar en TV / Android TV","",toggle("jf-hideOnTv",S.HideOnTv)) +
+
+        '<div class="jf-section-title">Presentación</div>' +
+        row("Altura del banner","",sel("jf-bannerHeight",heightOpts,S.BannerHeight)) +
+        row("Posición de la imagen","",sel("jf-imagePosition",posOpts,S.ImagePosition)) +
+        row("Botón Reproducir","",toggle("jf-showPlay",S.ShowPlayButton)) +
+        row("Texto del botón","Vacío = 'Reproducir'",inpTxt("jf-playText",S.CustomPlayButtonText,"Reproducir")) +
+        row("Mostrar rating","",toggle("jf-showRating",S.ShowCommunityRating)) +
+        row("Mostrar descripción","",toggle("jf-showDesc",S.ShowDescription)) +
+        row("Estilo Hero","Overlay con gradiente y CTA grande",toggle("jf-useHero",S.UseHeroDisplayStyle)) +
+
+        '<div class="jf-section-title">Tráileres <span class="jf-pill">TMDB</span></div>' +
+        row("Reproducir tráileres","Al entrar al slide",toggle("jf-trailerEnabled",S.TrailerEnabled)) +
+        row("Fuente del tráiler","",sel("jf-trailerSource",srcOpts,S.TrailerSource)) +
+        row("API Key de TMDB","Requerida si fuente = TMDB",inpPwd("jf-tmdbKey2",S.TmdbApiKey,"abc123...")) +
+        row("Idioma del tráiler","",sel("jf-trailerLang",langOpts,S.TrailerLanguage)) +
+        row("Fallback subtitulado","Si no hay doblado, usar subtitulado",toggle("jf-trailerSubFb",S.TrailerSubtitleFallback)) +
+
+        '<div class="jf-section-title">Estilo de plataforma</div>' +
+        '<p style="font-size:11px;color:#9aa0a6;margin:0 0 6px">Cómo se ve el banner según tu plataforma favorita</p>' +
+        '<div class="jf-platforms">'+platHtml+'</div>' +
+
+        '<div class="jf-preview-block">' +
+            '<div class="jf-ptitle"><span class="jf-live-dot"></span>Vista en vivo · '+esc(getPlatform().name)+'</div>' +
+            renderBannerPreview() +
+        '</div>' +
+    '</div>';
+}
+function getPlatform(){
+    var S = config.Slider;
+    for (var i = 0; i < PLATFORMS.length; i++) if (PLATFORMS[i].id===S.PlatformStyle) return PLATFORMS[i];
+    return PLATFORMS[0];
+}
+function renderBannerPreview(){
+    var S = config.Slider; var p = getPlatform();
+    var dots = ""; var max = Math.min(5, S.MaxItems||5);
+    for (var i = 0; i < max; i++) dots += '<span'+(i===0?' class="jf-active"':"")+'></span>';
+    return '<div class="jf-banner-mock">' +
+        '<div class="jf-bg-art" style="background:'+p.bg+'"></div><div class="jf-bg"></div>' +
+        '<div class="jf-content">' +
+            (S.BannerHeading?'<div class="jf-heading" style="color:'+p.bg.match(/#[0-9a-f]{6}/i)[0]+'">'+esc(S.BannerHeading)+'</div>':"") +
+            '<div class="jf-btitle">The Last of Us</div>' +
+            '<div class="jf-bmeta">' +
+                (S.ShowCommunityRating?'<span class="jf-pill-meta">★ 8.7</span>':"") +
+                '<span>2025</span><span class="jf-pill-meta">HBO</span>' +
+                (S.TrailerEnabled?'<span class="jf-pill-meta">🎬 Tráiler</span>':"") +
+            '</div>' +
+            (S.ShowDescription?'<div class="jf-bdesc">20 años tras la civilización actual, dos sobrevivientes viajan a través de los EE.UU. esquivando infectados y clanes peligrosos.</div>':"") +
+            '<div class="jf-btns">' +
+                (S.ShowPlayButton?'<span class="jf-btn-play">▶ '+esc(S.CustomPlayButtonText||"Reproducir")+'</span>':"") +
+                '<span class="jf-btn-more">+ Mi lista</span>' +
+            '</div>' +
+        '</div>' +
+        '<div class="jf-dots">'+dots+'</div>' +
+    '</div>';
+}
+
+// ====== TAGS TAB ======
+function renderTags(){
+    var B = config.Badges;
+    var L = B.Language || {};
+    var N = B.Status || {};
+    var flagOpts = [{v:"Mexico",l:"🇲🇽 México"},{v:"Spain",l:"🇪🇸 España"},{v:"None",l:"Sin bandera"}];
+    var posOpts  = [{v:"TopLeft",l:"Arriba-Izq"},{v:"TopRight",l:"Arriba-Der"},{v:"BottomLeft",l:"Abajo-Izq"},{v:"BottomRight",l:"Abajo-Der"}];
+    var layOpts  = [{v:"Vertical",l:"Vertical"},{v:"Horizontal",l:"Horizontal"}];
+    var styOpts  = [{v:"Image",l:"Imagen PNG"},{v:"Text",l:"Texto"}];
+    var kidOpts  = [{v:"ParentalRating",l:"Clasificación (G/PG/TV-Y)"},{v:"Tag",l:"Tag manual"},{v:"Both",l:"Ambos"}];
+    var fmtOpts  = [{v:"JPEG",l:"JPEG"},{v:"PNG",l:"PNG"},{v:"WebP",l:"WebP"}];
+
+    return '<div class="jf-panel">' +
+        '<h2>🏷️ Etiquetas inteligentes</h2>' +
+        '<p class="jf-sub">Banderas, subtítulos, NUEVO y KID · heredado de JellyTag</p>' +
+
+        '<div class="jf-section-title">Alcance</div>' +
+        row("Habilitar badges","",toggle("jf-badgesEnabled",B.Enabled)) +
+        row("Aplicar en pósteres","",toggle("jf-onPosters",B.EnableOnPosters)) +
+        row("Aplicar en thumbnails","",toggle("jf-onThumbs",B.EnableOnThumbs)) +
+        row("Thumbs usan mismos badges","",toggle("jf-thumbSame",B.ThumbSameAsPoster)) +
+
+        '<div class="jf-section-title">Layout</div>' +
+        row("Posición","",sel("jf-badgePos",posOpts,L.Position||"TopRight")) +
+        row("Dirección","Cómo se apilan múltiples badges",sel("jf-badgeLayout",layOpts,L.Layout||"Vertical")) +
+        row("Estilo","",sel("jf-badgeStyle",styOpts,L.BadgeStyle||"Image")) +
+        row("Tamaño (%)","Relativo al póster",inp("jf-badgeSize",L.BadgeSize||15,"number")) +
+        row("Espacio entre badges (px)","",inp("jf-badgeGap",L.Gap||10,"number")) +
+
+        '<div class="jf-section-title">Audio LAT</div>' +
+        row("Mostrar LAT cuando audio es es-419","",toggle("jf-latTag",L.Enabled)) +
+        row("Bandera para LAT","",sel("jf-latFlag",flagOpts,L.LatinFlagStyle||"Mexico")) +
+        row("Texto del badge LAT","",inpTxt("jf-latText",L.LatinText,"LAT")) +
+        row("Bandera por país de producción","Si es argentina, muestra 🇦🇷 + LAT",toggle("jf-countryFlag",L.ShowProductionCountryFlag)) +
+
+        '<div class="jf-section-title">Subtítulos</div>' +
+        row("Colapsar SUB cuando hay muchos","",toggle("jf-subCollapse",L.SimplifiedSubMode)) +
+        row("Umbral de subtítulos","",inp("jf-subThreshold",L.SubThreshold||3,"number")) +
+        row("Texto del badge SUB","",inpTxt("jf-subText",L.SubText,"SUB")) +
+
+        '<div class="jf-section-title">NUEVO</div>' +
+        row("Mostrar NUEVO en reciente","",toggle("jf-newTag",N.NewEnabled)) +
+        row("Días para considerarlo nuevo","",inp("jf-newDays",N.NewDaysThreshold||30,"number")) +
+        row("Texto","",inpTxt("jf-newText",N.NewText,"NUEVO")) +
+        row("Colores (fondo / texto)","",'<input class="jf-color" id="jf-newBg" type="color" value="'+esc(N.NewBgColor||"#1a3a1a")+'"> <input class="jf-color" id="jf-newFg" type="color" value="'+esc(N.NewTextColor||"#6fcf6f")+'">') +
+
+        '<div class="jf-section-title">KID</div>' +
+        row("Mostrar KID en infantil","",toggle("jf-kidTag",N.KidEnabled)) +
+        row("Detección","",sel("jf-kidMode",kidOpts,N.KidDetectionMode||"ParentalRating")) +
+        row("Texto","",inpTxt("jf-kidText",N.KidText,"KID")) +
+        row("Colores (fondo / texto)","",'<input class="jf-color" id="jf-kidBg" type="color" value="'+esc(N.KidBgColor||"#3a2a1a")+'"> <input class="jf-color" id="jf-kidFg" type="color" value="'+esc(N.KidTextColor||"#f0a050")+'">') +
+
+        '<div class="jf-section-title">Rendimiento</div>' +
+        row("Caché (horas)","Re-genera el PNG cada N horas",inp("jf-cacheHours",B.CacheDurationHours||24,"number")) +
+        row("Formato de salida","",sel("jf-outputFmt",fmtOpts,B.OutputFormat||"JPEG")) +
+        row("Calidad JPEG","1–100",inp("jf-jpegQ",B.JpegQuality||90,"number")) +
+
+        '<div class="jf-preview-block">' +
+            '<div class="jf-ptitle"><span class="jf-live-dot"></span>Vista en vivo · posición '+esc(L.Position||"TopRight")+'</div>' +
+            renderTagsPreview() +
+        '</div>' +
+    '</div>';
+}
+function renderTagsPreview(){
+    var B = config.Badges; var L = B.Language||{}; var N = B.Status||{};
+    var posMap = {"TopLeft":"jf-tl","TopRight":"","BottomLeft":"jf-bl","BottomRight":"jf-br"};
+    var pos = posMap[L.Position]||"";
+    var layout = L.Layout==="Horizontal"?" jf-horizontal":"";
+    var flagKey = L.LatinFlagStyle==="Spain"?"es":(L.LatinFlagStyle==="None"?"":"mx");
+    var flagGlyph = FLAGS[flagKey]||"";
+
+    var nuevoHtml = N.NewEnabled ? '<div class="jf-nuevo" style="background:'+esc(N.NewBgColor)+';color:'+esc(N.NewTextColor)+'">'+esc(N.NewText||"NUEVO")+'</div>' : "";
+    var kidHtml   = N.KidEnabled ? '<div class="jf-kid" style="background:'+esc(N.KidBgColor)+';color:'+esc(N.KidTextColor)+'">'+esc(N.KidText||"KID")+'</div>' : "";
+    var latRow    = L.Enabled ? '<div class="jf-badge-row"><span class="jf-flag-box">'+flagGlyph+'</span><span class="jf-badge-txt">'+esc(L.LatinText||"LAT")+'</span></div>' : "";
+    var subRow    = L.SimplifiedSubMode ? '<div class="jf-badge-row"><span class="jf-badge-txt">'+esc(L.SubText||"SUB")+'</span></div>' : "";
+
+    return '<div class="jf-badge-demo">' +
+        '<div class="jf-poster"><div class="jf-cover">🎬</div>'+nuevoHtml+'<div class="jf-tags-stack '+pos+layout+'">'+latRow+subRow+'</div><div class="jf-caption">LAT + nuevo</div></div>' +
+        '<div class="jf-poster"><div class="jf-cover">🎞️</div><div class="jf-tags-stack '+pos+layout+'">'+(L.Enabled?'<div class="jf-badge-row"><span class="jf-flag-box">🇦🇷</span><span class="jf-badge-txt">'+esc(L.LatinText||"LAT")+'</span></div>':"")+'</div><div class="jf-caption">Producción AR</div></div>' +
+        '<div class="jf-poster"><div class="jf-cover">🧒</div>'+nuevoHtml+kidHtml+'<div class="jf-caption">Infantil</div></div>' +
+        '<div class="jf-poster"><div class="jf-cover">🎥</div><div class="jf-tags-stack '+pos+layout+'"><div class="jf-badge-row"><span class="jf-flag-box">🇺🇸</span><span class="jf-badge-txt">ENG</span></div>'+subRow+'</div><div class="jf-caption">+7 subtítulos</div></div>' +
+    '</div>';
+}
+
+// ====== STUDIOS TAB ======
+function renderStudios(){
+    var S = config.Studios;
+    var imgOpts = [{v:"Logo",l:"Solo logo"},{v:"Text",l:"Solo texto"},{v:"LogoAndName",l:"Logo + nombre"}];
+    var cardsHtml = "";
+    for (var i = 0; i < S.Items.length; i++){
+        var s = S.Items[i];
+        cardsHtml += '<div class="jf-studio-card" data-studio-idx="'+i+'" style="background:'+esc(s.Gradient||"#222")+'"><span>'+esc(s.Name)+'</span><div class="jf-dot">✎</div></div>';
+    }
+    cardsHtml += '<div class="jf-add-studio" id="jf-addStudio"><div class="jf-plus">+</div><div class="jf-t">Añadir estudio</div></div>';
+
+    var previewItems = "";
+    for (var j = 0; j < S.Items.length; j++){
+        var ss = S.Items[j];
+        previewItems += '<div class="jf-sitem" style="background:'+esc(ss.Gradient||"#222")+';border-radius:'+S.BorderRadius+'px;height:'+Math.max(50,S.CardHeight)+'px">'+(S.ShowName?esc(ss.Name):"")+'</div>';
+    }
+
+    return '<div class="jf-panel">' +
+        '<h2>🏛️ Estudios en la página de inicio</h2>' +
+        '<p class="jf-sub">Cards clickeables bajo el banner · primera fila en la home por spec</p>' +
+
+        '<div class="jf-section-title">Sección</div>' +
+        row("Habilitar sección","",toggle("jf-studiosEnabled",S.Enabled)) +
+        row("Título de la sección","",inpTxt("jf-sectionTitle",S.SectionTitle,"Estudios")) +
+        row("Estilo de imagen","",sel("jf-imageStyle",imgOpts,S.ImageStyle)) +
+        row("Mostrar nombre","",toggle("jf-showName",S.ShowName)) +
+        row("Efecto hover","",toggle("jf-hoverEffect",S.HoverEffect)) +
+
+        '<div class="jf-section-title">Tamaño de card</div>' +
+        row("Ancho (px)","",inp("jf-cardW",S.CardWidth,"number")) +
+        row("Alto (px)","",inp("jf-cardH",S.CardHeight,"number")) +
+        row("Radio de borde (px)","",inp("jf-cardR",S.BorderRadius,"number")) +
+
+        '<div class="jf-section-title">Estudios configurados <span class="jf-pill">'+S.Items.length+'</span></div>' +
+        '<div class="jf-studios-grid">'+cardsHtml+'</div>' +
+
+        '<div class="jf-preview-block">' +
+            '<div class="jf-ptitle"><span class="jf-live-dot"></span>Vista en vivo · como se verá en Inicio</div>' +
+            '<div class="jf-rail-title">'+esc(S.SectionTitle)+'</div>' +
+            '<div class="jf-studios-scroll">'+previewItems+'</div>' +
+        '</div>' +
+    '</div>';
+}
+
+// ====== THEMES TAB ======
+function renderThemes(){
+    var T = config.Theme;
+    var fontOpts = [{v:"system",l:"Sistema (default)"},{v:"inter",l:"Inter"},{v:"roboto",l:"Roboto"},{v:"poppins",l:"Poppins"},{v:"sfpro",l:"SF Pro Display"}];
+    var cardsHtml = "";
+    for (var i = 0; i < THEMES.length; i++){
+        var th = THEMES[i];
+        var selCls = T.ActiveTheme===th.id?" jf-selected":"";
+        cardsHtml += '<div class="jf-theme-card'+selCls+'" data-theme="'+th.id+'">' +
+            '<div class="jf-theme-preview" style="background:'+th.bg+'">'+(th.id==="Default"?"—":esc(th.name))+'<div class="jf-mini-ui"><span></span><span></span><span></span><span></span></div></div>' +
+            '<div class="jf-theme-info"><span>'+esc(th.name)+'</span><span class="jf-tcheck">'+(T.ActiveTheme===th.id?"✓":"")+'</span></div>' +
+        '</div>';
+    }
+    var selTh = THEMES.filter(function(x){return x.id===T.ActiveTheme})[0] || THEMES[0];
+    var primary = T.PrimaryColor || selTh.primary;
+
+    return '<div class="jf-panel">' +
+        '<h2>🎨 Tema visual</h2>' +
+        '<p class="jf-sub">Aplica el look & feel de tu plataforma favorita a TODA la UI de Jellyfin</p>' +
+
+        '<div class="jf-themes-grid">'+cardsHtml+'</div>' +
+
+        '<div class="jf-section-title">Personalización fina</div>' +
+        row("Color primario (override)","Sobrescribe el acento del tema",'<input class="jf-color" id="jf-primary" type="color" value="'+esc(primary)+'">') +
+        row("Fuente tipográfica","",sel("jf-font",fontOpts,T.FontFamily||"system")) +
+
+        '<div class="jf-preview-block">' +
+            '<div class="jf-ptitle"><span class="jf-live-dot"></span>Vista en vivo · tema: '+esc(selTh.name)+'</div>' +
+            '<div class="jf-banner-mock"><div class="jf-bg-art" style="background:'+selTh.bg+'"></div><div class="jf-bg"></div>' +
+                '<div class="jf-content">' +
+                    '<div class="jf-heading" style="color:'+esc(primary)+'">DESTACADO</div>' +
+                    '<div class="jf-btitle">Tu biblioteca, con el estilo de '+esc(selTh.name)+'</div>' +
+                    '<div class="jf-bdesc">El tema aplica a toda la UI: bordes, botones, hovers, header, menús e iconos.</div>' +
+                    '<div class="jf-btns"><span class="jf-btn-play" style="background:'+esc(primary)+';color:#fff">▶ Reproducir</span><span class="jf-btn-more">+ Mi lista</span></div>' +
+                '</div>' +
+            '</div>' +
+            '<div style="height:10px"></div>' +
+            '<div class="jf-rail-title" style="color:'+esc(primary)+'">Continuar viendo</div>' +
+            '<div class="jf-rail-items">'+repeatItem(5)+'</div>' +
+        '</div>' +
+    '</div>';
+}
+
+// ====== NAV TAB ======
+function renderNav(){
+    var N = config.Navigation;
+    var items = ["Inicio","Películas","Series","TV en Directo"];
+    var itemsHtml = "";
+    if (N.ReplaceMyContent){
+        for (var i = 0; i < items.length; i++)
+            itemsHtml += '<span class="jf-nav-item'+(i===0?" jf-active":"")+'">'+esc(items[i])+'</span>';
+    } else {
+        itemsHtml = '<span class="jf-nav-item jf-active">Mi Contenido</span><span class="jf-nav-item">Ajustes</span>';
+    }
+    return '<div class="jf-panel">' +
+        '<h2>🧭 Navegación superior</h2>' +
+        '<p class="jf-sub">Reemplaza "Mi Contenido" por los accesos directos fijos</p>' +
+        row("Sustituir 'Mi Contenido'","",toggle("jf-navReplace",N.ReplaceMyContent)) +
+        '<div class="jf-preview-block">' +
+            '<div class="jf-ptitle"><span class="jf-live-dot"></span>Vista en vivo · '+(N.ReplaceMyContent?"con JellyFusion":"Jellyfin por defecto")+'</div>' +
+            '<div class="jf-nav-preview-bar">'+itemsHtml+'</div>' +
+        '</div>' +
+        '<div class="jf-callout">⚠ Si desactivas este toggle, Jellyfin vuelve a mostrar "Mi Contenido". JellyFusion no toca el menú hasta que actives la opción.</div>' +
+    '</div>';
+}
+
+// ====== NOTIF TAB ======
+function renderNotif(){
+    var N = config.Notifications;
+    return '<div class="jf-panel">' +
+        '<h2>🔔 Notificaciones</h2>' +
+        '<p class="jf-sub">Avisa en Discord o Telegram cuando se añade contenido nuevo</p>' +
+
+        '<div class="jf-section-title">Disparadores</div>' +
+        row("Avisar por contenido nuevo","Movies o Series añadidas",toggle("jf-notifyNew",N.NotifyNewContent)) +
+        row("Avisar por contenido infantil","Subset anterior, solo KID",toggle("jf-notifyKid",N.NotifyKidContent)) +
+
+        '<div class="jf-section-title">Discord</div>' +
+        row("Habilitar Discord","",toggle("jf-discordEnabled",N.Discord.Enabled)) +
+        row("Webhook URL","https://discord.com/api/webhooks/...",inpPwd("jf-discordWebhook",N.Discord.WebhookUrl,"https://discord.com/...")) +
+
+        '<div class="jf-section-title">Telegram</div>' +
+        row("Habilitar Telegram","",toggle("jf-telegramEnabled",N.Telegram.Enabled)) +
+        row("Bot token","de @BotFather",inpPwd("jf-telegramToken",N.Telegram.BotToken,"123:ABC...")) +
+        row("Chat ID","del canal o grupo",inpTxt("jf-telegramChat",N.Telegram.ChatId,"-100123456")) +
+
+        '<div class="jf-preview-block">' +
+            '<div class="jf-ptitle"><span class="jf-live-dot"></span>Vista previa del mensaje</div>' +
+            '<div class="jf-notif-mock">' +
+                '<div class="jf-nhead">' +
+                    '<div class="jf-avatar">JF</div>' +
+                    '<div><div class="jf-nname">JellyFusion</div><div class="jf-ntime">hoy, 21:48 · via webhook</div></div>' +
+                '</div>' +
+                '<div class="jf-nbody">' +
+                    '🎬 <strong>Nueva película añadida:</strong> <em>The Last of Us S02E01</em><br>' +
+                    '⭐ 8.7 · 🇺🇸 ENG + 🇲🇽 LAT · 4K HDR<br>' +
+                    '<span style="opacity:.7">Ver en Jellyfin →</span>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+    '</div>';
+}
+
+// ====== ABOUT TAB ======
+function renderAbout(){
+    return '<div class="jf-panel">' +
+        '<h2>ℹ️ Acerca de JellyFusion</h2>' +
+        '<p class="jf-sub">Plugin all-in-one para Jellyfin 10.10+</p>' +
+
+        '<div class="jf-about-card">' +
+            '<h3>Qué incluye este plugin</h3>' +
+            '<p>Reemplaza a 4–5 plugins individuales con una sola instalación</p>' +
+            '<div>' +
+                '<span class="jf-module-chip">🎬 Banner destacado</span>' +
+                '<span class="jf-module-chip">🏷️ Badges LAT/SUB/NUEVO/KID</span>' +
+                '<span class="jf-module-chip">🏛️ Estudios</span>' +
+                '<span class="jf-module-chip">🏠 Home rails</span>' +
+                '<span class="jf-module-chip">🎨 7 temas</span>' +
+                '<span class="jf-module-chip">🧭 Navegación</span>' +
+                '<span class="jf-module-chip">🔔 Notificaciones</span>' +
+                '<span class="jf-module-chip">🌐 4 idiomas</span>' +
+            '</div>' +
+        '</div>' +
+
+        '<div class="jf-section-title">Información técnica</div>' +
+        '<div class="jf-about-grid">' +
+            '<div class="jf-about-item"><div class="jf-akey">Versión</div><div class="jf-aval">2.0.0</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Target ABI</div><div class="jf-aval">Jellyfin 10.10.0.0+</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">GUID</div><div class="jf-aval" style="font-family:monospace;font-size:10px">a1b2c3d4-e5f6-7890-abcd-ef1234567890</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Categoría</div><div class="jf-aval">General</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Licencia</div><div class="jf-aval">MIT</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Framework</div><div class="jf-aval">.NET 8.0</div></div>' +
+        '</div>' +
+
+        '<div class="jf-section-title">Créditos y fuentes</div>' +
+        '<div class="jf-about-grid">' +
+            '<div class="jf-about-item"><div class="jf-akey">Autor</div><div class="jf-aval">KOOL4</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Email</div><div class="jf-aval" style="font-size:11px">jose13tony13@gmail.com</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Repositorio</div><div class="jf-aval" style="font-size:11px">github.com/KOOL4/JellyFusion</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Basado en</div><div class="jf-aval" style="font-size:11px">EditorsChoice · JellyTag</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Datos</div><div class="jf-aval" style="font-size:11px">TMDB · MDBList · Trakt</div></div>' +
+            '<div class="jf-about-item"><div class="jf-akey">Idiomas</div><div class="jf-aval">ES · EN · PT · FR</div></div>' +
+        '</div>' +
+    '</div>';
+}
+
+// ====== Bind & render ======
+function renderPanels(){
+    var map = { home:renderHome, banner:renderBanner, tags:renderTags, studios:renderStudios, themes:renderThemes, nav:renderNav, notif:renderNotif, about:renderAbout };
+    document.getElementById("jf-panels").innerHTML = map[currentTab]();
+    bindPanel();
+}
+
+function bindPanel(){
+    // Platform cards
+    var plats = document.querySelectorAll("[data-platform]");
+    for (var i = 0; i < plats.length; i++){
+        (function(el){ el.onclick = function(){ config.Slider.PlatformStyle = el.getAttribute("data-platform"); renderPanels(); }; })(plats[i]);
+    }
+    // Theme cards
+    var ths = document.querySelectorAll("[data-theme]");
+    for (var j = 0; j < ths.length; j++){
+        (function(el){ el.onclick = function(){ config.Theme.ActiveTheme = el.getAttribute("data-theme"); renderPanels(); }; })(ths[j]);
+    }
+    // Rail toggles
+    var rails = document.querySelectorAll("[data-rail-toggle]");
+    for (var k = 0; k < rails.length; k++){
+        (function(el){
+            el.onchange = function(){
+                var id = el.getAttribute("data-rail-toggle");
+                for (var r = 0; r < config.Home.Rails.length; r++) if (config.Home.Rails[r].Id === id) config.Home.Rails[r].Enabled = el.checked;
+                renderPanels();
+            };
+        })(rails[k]);
+    }
+
+    // Simple bindings: id → config path
+    var bindings = {
+        // Banner
+        "jf-bannerEnabled": ["Slider","Enabled","bool"],
+        "jf-mode":          ["Slider","Mode"],
+        "jf-bannerHeading": ["Slider","BannerHeading"],
+        "jf-maxItems":      ["Slider","MaxItems","int"],
+        "jf-autoplay":      ["Slider","AutoplayEnabled","bool"],
+        "jf-interval":      ["Slider","AutoplayInterval","int"],
+        "jf-transition":    ["Slider","TransitionEffect"],
+        "jf-minRating":     ["Slider","MinCommunityRating","float"],
+        "jf-showPlayed":    ["Slider","ShowPlayedItems","bool"],
+        "jf-hideOnTv":      ["Slider","HideOnTv","bool"],
+        "jf-bannerHeight":  ["Slider","BannerHeight"],
+        "jf-imagePosition": ["Slider","ImagePosition"],
+        "jf-showPlay":      ["Slider","ShowPlayButton","bool"],
+        "jf-playText":      ["Slider","CustomPlayButtonText"],
+        "jf-showRating":    ["Slider","ShowCommunityRating","bool"],
+        "jf-showDesc":      ["Slider","ShowDescription","bool"],
+        "jf-useHero":       ["Slider","UseHeroDisplayStyle","bool"],
+        "jf-trailerEnabled":["Slider","TrailerEnabled","bool"],
+        "jf-trailerSource": ["Slider","TrailerSource"],
+        "jf-tmdbKey2":      ["Slider","TmdbApiKey"],
+        "jf-trailerLang":   ["Slider","TrailerLanguage"],
+        "jf-trailerSubFb":  ["Slider","TrailerSubtitleFallback","bool"],
+
+        // Tags
+        "jf-badgesEnabled": ["Badges","Enabled","bool"],
+        "jf-onPosters":     ["Badges","EnableOnPosters","bool"],
+        "jf-onThumbs":      ["Badges","EnableOnThumbs","bool"],
+        "jf-thumbSame":     ["Badges","ThumbSameAsPoster","bool"],
+        "jf-badgePos":      ["Badges","Language","Position"],
+        "jf-badgeLayout":   ["Badges","Language","Layout"],
+        "jf-badgeStyle":    ["Badges","Language","BadgeStyle"],
+        "jf-badgeSize":     ["Badges","Language","BadgeSize","int"],
+        "jf-badgeGap":      ["Badges","Language","Gap","int"],
+        "jf-latTag":        ["Badges","Language","Enabled","bool"],
+        "jf-latFlag":       ["Badges","Language","LatinFlagStyle"],
+        "jf-latText":       ["Badges","Language","LatinText"],
+        "jf-countryFlag":   ["Badges","Language","ShowProductionCountryFlag","bool"],
+        "jf-subCollapse":   ["Badges","Language","SimplifiedSubMode","bool"],
+        "jf-subThreshold":  ["Badges","Language","SubThreshold","int"],
+        "jf-subText":       ["Badges","Language","SubText"],
+        "jf-newTag":        ["Badges","Status","NewEnabled","bool"],
+        "jf-newDays":       ["Badges","Status","NewDaysThreshold","int"],
+        "jf-newText":       ["Badges","Status","NewText"],
+        "jf-newBg":         ["Badges","Status","NewBgColor"],
+        "jf-newFg":         ["Badges","Status","NewTextColor"],
+        "jf-kidTag":        ["Badges","Status","KidEnabled","bool"],
+        "jf-kidMode":       ["Badges","Status","KidDetectionMode"],
+        "jf-kidText":       ["Badges","Status","KidText"],
+        "jf-kidBg":         ["Badges","Status","KidBgColor"],
+        "jf-kidFg":         ["Badges","Status","KidTextColor"],
+        "jf-cacheHours":    ["Badges","CacheDurationHours","int"],
+        "jf-outputFmt":     ["Badges","OutputFormat"],
+        "jf-jpegQ":         ["Badges","JpegQuality","int"],
+
+        // Studios
+        "jf-studiosEnabled":["Studios","Enabled","bool"],
+        "jf-sectionTitle":  ["Studios","SectionTitle"],
+        "jf-imageStyle":    ["Studios","ImageStyle"],
+        "jf-showName":      ["Studios","ShowName","bool"],
+        "jf-hoverEffect":   ["Studios","HoverEffect","bool"],
+        "jf-cardW":         ["Studios","CardWidth","int"],
+        "jf-cardH":         ["Studios","CardHeight","int"],
+        "jf-cardR":         ["Studios","BorderRadius","int"],
+
+        // Home
+        "jf-dataSource":    ["Home","DataSource"],
+        "jf-tmdbKey":       ["Home","TmdbApiKey"],
+        "jf-mdblistKey":    ["Home","MdbListApiKey"],
+        "jf-traktKey":      ["Home","TraktApiKey"],
+
+        // Themes
+        "jf-primary":       ["Theme","PrimaryColor"],
+        "jf-font":          ["Theme","FontFamily"],
+
+        // Nav
+        "jf-navReplace":    ["Navigation","ReplaceMyContent","bool"],
+
+        // Notif
+        "jf-notifyNew":     ["Notifications","NotifyNewContent","bool"],
+        "jf-notifyKid":     ["Notifications","NotifyKidContent","bool"],
+        "jf-discordEnabled":["Notifications","Discord","Enabled","bool"],
+        "jf-discordWebhook":["Notifications","Discord","WebhookUrl"],
+        "jf-telegramEnabled":["Notifications","Telegram","Enabled","bool"],
+        "jf-telegramToken": ["Notifications","Telegram","BotToken"],
+        "jf-telegramChat":  ["Notifications","Telegram","ChatId"]
+    };
+
+    for (var id in bindings){
+        (function(id, path){
+            var el = document.getElementById(id); if (!el) return;
+            el.addEventListener("change", function(){
+                var type = path[path.length-1];
+                var keys = ["bool","int","float"].indexOf(type) >= 0 ? path.slice(0,-1) : path;
+                var v;
+                if (el.type === "checkbox") v = el.checked;
+                else if (type === "int")   v = parseInt(el.value,10) || 0;
+                else if (type === "float") v = parseFloat(el.value) || 0;
+                else v = el.value;
+                var obj = config;
+                for (var i = 0; i < keys.length-1; i++){
+                    if (!obj[keys[i]]) obj[keys[i]] = {};
+                    obj = obj[keys[i]];
+                }
+                obj[keys[keys.length-1]] = v;
+                renderPanels();
+            });
+        })(id, bindings[id]);
+    }
+}
+
+function renderAll(){
+    var st  = document.getElementById("jf-subtitle");
+    var ll  = document.getElementById("jf-lang-label");
+    var bs  = document.getElementById("jf-btn-save");
+    var bc  = document.getElementById("jf-btn-cancel");
+    if (st) st.textContent = t("subtitle");
+    if (ll) ll.textContent = t("langLabel");
+    if (bs) bs.textContent = t("save");
+    if (bc) bc.textContent = t("cancel");
+    renderLangs();
+    renderTabs();
+    if (config) renderPanels();
+}
+
+// ====== Init ======
+function tryInit(){
+    var page = document.getElementById("JellyFusionConfigPage");
+    if (!page || page.__jfInitialized) return;
+    page.__jfInitialized = true;
+
+    var saveBtn   = document.getElementById("jf-btn-save");
+    var cancelBtn = document.getElementById("jf-btn-cancel");
+
+    loadConfig().then(function(cfg){
+        config = cfg;
+        originalConfig = JSON.parse(JSON.stringify(cfg));
+        currentLang = cfg.Language || "es";
+        renderAll();
+    }).catch(function(e){
+        console.error("JellyFusion load error:", e);
+        toast(t("loadErr"), true);
+    });
+
+    if (saveBtn) saveBtn.onclick = function(){
+        if (!config) return;
+        saveConfig(config).then(function(){
+            toast(t("savedOk"));
+            originalConfig = JSON.parse(JSON.stringify(config));
+        }).catch(function(e){
+            console.error("JellyFusion save error:", e);
+            toast(t("savedErr"), true);
+        });
+    };
+    if (cancelBtn) cancelBtn.onclick = function(){
+        if (!originalConfig) return;
+        config = JSON.parse(JSON.stringify(originalConfig));
+        currentLang = config.Language || "es";
+        renderAll();
+    };
+}
+
+// Expose init globally so the boot trigger can find it
+window.__jfInit = tryInit;
+
+// Try init on multiple events (Jellyfin SPA navigation)
+if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(tryInit, 10);
+} else {
+    document.addEventListener("DOMContentLoaded", tryInit);
+}
+document.addEventListener("viewshow", function(ev){
+    if (ev && ev.target && ev.target.id === "JellyFusionConfigPage") tryInit();
+});
+
+})();
+</script>
+</body>
+</html>
