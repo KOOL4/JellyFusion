@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>JellyFusion</name>
+    </assembly>
+    <members>
+        <member name="T:JellyFusion.Configuration.PluginConfiguration">
+            <summary>Root configuration for the JellyFusion plugin.</summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.PluginConfiguration.Language">
+            <summary>UI language: "es" | "en" | "pt" | "fr"</summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.HomeConfig.DataSource">
+            <summary>Data source: "Local" | "TMDB" | "MDBList" | "Trakt"</summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.HomeConfig.Rails">
+            <summary>Rails enabled on the home page, in visible order (top→bottom).</summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.SliderConfig.PlatformStyle">
+            <summary>Visual style: "netflix" | "disney" | "prime" | "apple"</summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.BadgesConfig.BadgeOrder">
+            <summary>Badge order (index = priority, lower = rendered first / top).</summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.BadgesConfig.CustomText">
+            <summary>
+            Custom text overrides for badge labels.
+            Keyed by badge type (e.g. "4K", "HDR10", "HEVC", "DolbyAtmos").
+            Uses a List instead of Dictionary so Jellyfin's XmlSerializer can persist it.
+            </summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.ThemeConfig.ActiveTheme">
+            <summary>Default | Netflix | PrimeVideo | DisneyPlus | AppleTvPlus | Crunchyroll | ParamountPlus</summary>
+        </member>
+        <member name="P:JellyFusion.Configuration.NavigationConfig.ReplaceMyContent">
+            <summary>Replace "Mi Contenido" with fixed shortcuts.</summary>
+        </member>
+        <member name="T:JellyFusion.Configuration.CustomTextEntry">
+            <summary>
+            A single badge-label override: Key = badge type identifier,
+            Value = display string (e.g. Key="4K", Value="UHD").
+            </summary>
+        </member>
+        <member name="T:JellyFusion.Controllers.JellyFusionController">
+            <summary>
+            REST API for the JellyFusion plugin.
+            Base route: /jellyfusion
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetConfig">
+            <summary>GET current plugin configuration.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.SaveConfig(JellyFusion.Configuration.PluginConfiguration)">
+            <summary>POST — save full plugin configuration.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetHomeRails(System.Threading.CancellationToken)">
+            <summary>GET all enabled home rails resolved against the selected data source.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetSliderItems(System.Threading.CancellationToken)">
+            <summary>GET slider items for the current user.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetTrailer(System.Guid,System.Threading.CancellationToken)">
+            <summary>GET trailer URL for a specific item.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetBadgePreview(System.Guid)">
+            <summary>GET preview image with badges for a specific item (used by Live Preview).</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.ClearCache">
+            <summary>POST — clear the badge image cache.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetCacheStats">
+            <summary>GET badge cache statistics.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.UploadCustomBadge(System.String,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>POST — upload a custom badge image.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.DeleteCustomBadge(System.String)">
+            <summary>DELETE — revert a custom badge to default.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetStudios">
+            <summary>GET all configured studios with their browse URLs.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetThemeCss">
+            <summary>GET CSS for the active theme (injected by client script).</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.TestNotification(System.String,System.Threading.CancellationToken)">
+            <summary>POST — send a test notification to Discord or Telegram.</summary>
+        </member>
+        <member name="M:JellyFusion.Controllers.JellyFusionController.GetI18n(System.String)">
+            <summary>GET all localization strings for the requested (or current) language.</summary>
+        </member>
+        <member name="T:JellyFusion.LocalizationService">
+            <summary>
+            Loads and provides translated strings from embedded JSON resources.
+            Supported languages: es (Español Latino), en (English), pt (Português), fr (Français).
+            </summary>
+        </member>
+        <member name="M:JellyFusion.LocalizationService.Get(System.String,System.String)">
+            <summary>Get a translated string. Falls back to key if not found.</summary>
+        </member>
+        <member name="M:JellyFusion.LocalizationService.GetAllForLanguage(System.String)">
+            <summary>Returns all cached key/value pairs for the given language,
+            merged on top of English as a fallback layer.</summary>
+        </member>
+        <member name="T:JellyFusion.Middleware.BadgeMiddleware">
+            <summary>
+            ASP.NET Core middleware that intercepts Jellyfin image requests and composites
+            JellyTag badges onto posters and thumbnails server-side.
+            Works for ALL Jellyfin clients without any client-side configuration.
+            </summary>
+        </member>
+        <member name="T:JellyFusion.Middleware.BadgeMiddlewareStartup">
+            <summary>
+            Wires <see cref="T:JellyFusion.Middleware.BadgeMiddleware"/> into the ASP.NET Core request pipeline so that
+            badge overlays are composited on every Jellyfin image request.
+            Registered as an <see cref="T:Microsoft.AspNetCore.Hosting.IStartupFilter"/> so Jellyfin picks it up automatically.
+            </summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Badges.BadgeRenderService">
+            <summary>
+            Composites quality badges onto Jellyfin poster/thumbnail images server-side.
+            Supports Resolution, HDR, Codec, Audio, Language (with LAT/SUB logic),
+            and Status (NUEVO / KID) badges.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Badges.BadgeRenderService.Ct(System.Collections.Generic.IEnumerable{JellyFusion.Configuration.CustomTextEntry},System.String,System.String)">
+            <summary>
+            Looks up a custom text override from the list by key.
+            Returns <paramref name="defaultValue"/> if no override is found.
+            Replaces Dictionary.GetValueOrDefault so the config can be XML-serialized.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Badges.BadgeRenderService.RenderBadges(System.Byte[],MediaBrowser.Controller.Entities.BaseItem,JellyFusion.Configuration.BadgesConfig,System.Boolean)">
+            <summary>
+            Composites badges onto <paramref name="originalImageData"/> and returns
+            the resulting JPEG/PNG/WebP bytes.
+            </summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Badges.BadgeService">
+            <summary>Thin wrapper around ILibraryManager for badge-related item lookups.</summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Badges.ImageCacheService">
+            <summary>
+            In-memory + disk cache for badge-composited images.
+            Prevents re-rendering on every request.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Badges.ImageCacheService.Get(System.String,System.TimeSpan)">
+            <param name="ttl">
+            Must match the TTL passed to <see cref="M:JellyFusion.Modules.Badges.ImageCacheService.Set(System.String,System.Byte[],System.TimeSpan)"/> so that disk-cached files
+            are expired with the same policy as in-memory entries.
+            </param>
+        </member>
+        <member name="T:JellyFusion.Modules.Home.HomeService">
+            <summary>
+            Resolves the items for each enabled Home rail.
+            Supports Local library queries plus external trending sources
+            (TMDB, MDBList, Trakt) when the user supplies an API key.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Home.HomeService.BuildRailsAsync(System.Nullable{System.Guid},System.Threading.CancellationToken)">
+            <summary>Returns a lightweight payload describing every enabled rail.</summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Notifications.NotificationHostedService">
+            <summary>
+            Background service that listens for new library items and sends
+            notifications to Discord / Telegram when configured.
+            </summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Notifications.NotificationService">
+            <summary>
+            Public API for sending ad-hoc notifications from other modules.
+            Also exposes a "send test" helper used by the config page.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Notifications.NotificationService.SendTestAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Sends a plain test message to the specified channel ("discord" | "telegram").
+            Reads the current plugin configuration for webhook / bot credentials.
+            </summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Slider.SliderHostedService">
+            <summary>Background service stub for slider pre-warming and refresh tasks.</summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Slider.SliderService">
+            <summary>
+            Selects and returns the items to display in the Editor's Choice banner slider
+            based on the configured mode (Favourites / Random / Collections / New).
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Slider.SliderService.GetSliderItemsAsync(JellyFusion.Configuration.SliderConfig,System.Nullable{System.Guid},System.Threading.CancellationToken)">
+            <summary>Returns the list of items for the slider given current configuration.</summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Slider.TrailerService">
+            <summary>
+            Fetches trailer URLs from TMDB for the Editor's Choice slider.
+            Respects the configured trailer language and falls back to subtitled
+            version when no dubbed version is available.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Slider.TrailerService.GetTrailerUrlAsync(MediaBrowser.Controller.Entities.BaseItem,JellyFusion.Configuration.SliderConfig,System.Threading.CancellationToken)">
+            <summary>
+            Returns the best trailer URL for <paramref name="item"/> given the config.
+            Returns null if none found.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Studios.StudiosService.GetItemCountForStudio(System.String)">
+            <summary>
+            Returns the count of items in the library that belong to <paramref name="studioName"/>.
+            Used to validate that a studio has content before showing it in the UI.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Studios.StudiosService.GetStudioBrowseUrl(JellyFusion.Configuration.StudioItem)">
+            <summary>Returns the Jellyfin browse URL for a studio by name.</summary>
+        </member>
+        <member name="T:JellyFusion.Modules.Themes.ThemeService">
+            <summary>
+            Returns CSS variable overrides for each built-in theme.
+            Injected into the page via the client script.
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Themes.ThemeService.NormalisedFont(System.String)">
+            <summary>
+            Normalises a FontFamily config value.
+            "system", empty string, or null all mean "use the default/fallback value".
+            </summary>
+        </member>
+        <member name="M:JellyFusion.Modules.Themes.ThemeService.GetThemeCss(JellyFusion.Configuration.ThemeConfig)">
+            <summary>Returns an inline CSS block with theme variables for the active theme.</summary>
+        </member>
+        <member name="T:JellyFusion.Plugin">
+            <summary>
+            JellyFusion v2.0.0 — All-in-one Jellyfin enhancement plugin.
+            Combines Banner (Editor's Choice), Smart Tags (JellyTag), Studios,
+            Home rails, Themes, Navigation and Notifications into a single plugin.
+            </summary>
+        </member>
+        <member name="P:JellyFusion.Plugin.Name">
+            <inheritdoc />
+        </member>
+        <member name="P:JellyFusion.Plugin.Id">
+            <inheritdoc />
+        </member>
+        <member name="P:JellyFusion.Plugin.Description">
+            <inheritdoc />
+        </member>
+        <member name="P:JellyFusion.Plugin.Instance">
+            <summary>Global singleton instance.</summary>
+        </member>
+        <member name="M:JellyFusion.Plugin.GetPages">
+            <inheritdoc />
+        </member>
+        <member name="T:JellyFusion.PluginServiceRegistrator">
+            <summary>
+            Registers all JellyFusion services into the Jellyfin DI container.
+            </summary>
+        </member>
+    </members>
+</doc>
