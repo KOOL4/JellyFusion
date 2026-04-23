@@ -1,0 +1,53 @@
+﻿[
+{
+    "guid":  "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name":  "JellyFusion",
+    "description":  "All-in-one Jellyfin plugin: Netflix-style banner with trailers, smart badges (LAT/SUB/NUEVO/KID), configurable studios, home rails (Top 10), 7 themes, navigation shortcuts, Discord/Telegram notifications and a 4-language UI (ES/EN/PT/FR).",
+    "overview":  "Reemplaza 4-5 plugins individuales con una sola instalacion. Banner con traileres TMDB, badges inteligentes, studios configurables, Top 10 rails y tema visual por plataforma.",
+    "owner":  "KOOL4",
+    "category":  "General",
+    "imageUrl":  "https://raw.githubusercontent.com/KOOL4/JellyFusion/main/assets/logo.png",
+    "versions":  [
+                     {
+                         "version":  "2.0.4.0",
+                         "changelog":  "Hotfix sobre 2.0.3: (1) Guardar config ya no devuelve HTTP 400 - se corrige el formato de Tags (string separado por comas, no array) y todos los defaults se alinean 1:1 con las clases C#. (2) Los checkboxes y selects ahora responden - el panel dejo de re-renderizarse en cada cambio, asi no se pierde el foco ni se cierran los dropdowns. (3) \"Anadir / editar estudio\" ahora abre un modal interno bonito (no mas prompts del navegador) con campos Nombre, Etiquetas, Logo, Gradiente y vista previa en vivo. (4) Se puede eliminar un estudio desde el mismo modal con doble confirmacion.",
+                         "targetAbi":  "10.10.0.0",
+                         "sourceUrl":  "https://github.com/KOOL4/JellyFusion/releases/download/v2.0.4/JellyFusion-v2.0.4.zip",
+                         "checksum":  "a1846b45fbb9f58767bc1721c951e3f8",
+                         "timestamp":  "2026-04-23T00:39:10Z"
+                     },
+                     {
+                         "version":  "2.0.3.0",
+                         "changelog":  "Full i18n for every tab (panel content changes with language, not just the tab labels). Inicio, Temas and Notificaciones now render completely. \"Anadir estudio\" works - click it to add a studio via prompts; click an existing card to edit or delete. About tab cleaned up (removed License/Framework/Email/Data sources/Languages rows). New purple-neon jellyfish logo in the plugin catalog. Save now falls back to the custom endpoint if ApiClient rejects.",
+                         "targetAbi":  "10.10.0.0",
+                         "sourceUrl":  "https://github.com/KOOL4/JellyFusion/releases/download/v2.0.3/JellyFusion-v2.0.3.zip",
+                         "checksum":  "8db3fae3bbcd09518863fb55e50bf13f",
+                         "timestamp":  "2026-04-23T00:17:46Z"
+                     },
+                     {
+                         "version":  "2.0.2.0",
+                         "changelog":  "Backend fix: config now loads via Jellyfin\u0027s official ApiClient.getPluginConfiguration() instead of a custom endpoint that required elevated auth. Tabs, language chips and panels now render unconditionally even if the backend is slow. Version badge updated.",
+                         "targetAbi":  "10.10.0.0",
+                         "sourceUrl":  "https://github.com/KOOL4/JellyFusion/releases/download/v2.0.2/JellyFusion-v2.0.2.zip",
+                         "checksum":  "f5bdd82218e939dffa26ef03f06d82b9",
+                         "timestamp":  "2026-04-22T19:29:38Z"
+                     },
+                     {
+                         "version":  "2.0.1.0",
+                         "changelog":  "UI fix: restructured config page so Jellyfin preserves CSS and JS. The 8 tabs now render correctly, language chips populate, all panels show up. No feature changes vs 2.0.0.",
+                         "targetAbi":  "10.10.0.0",
+                         "sourceUrl":  "https://github.com/KOOL4/JellyFusion/releases/download/v2.0.1/JellyFusion-v2.0.1.zip",
+                         "checksum":  "a15e933bdd200446a633aaf44beafa49",
+                         "timestamp":  "2026-04-22T19:08:37Z"
+                     },
+                     {
+                         "version":  "2.0.0.0",
+                         "changelog":  "Complete rewrite from scratch. New UI with 8 tabs (Inicio, Banner, Etiquetas, Estudios, Temas, Navegacion, Notificaciones, Acerca de). Added Home rails with Top 10 from TMDB/MDBList/Trakt, Banner platform styles (Netflix/Disney+/Prime/Apple TV+), color pickers for NUEVO/KID badges, TMDB duotone studio logos by default, live previews in every tab, 4 languages (ES/EN/PT/FR), inlined single-file HTML, fresh repository.",
+                         "targetAbi":  "10.10.0.0",
+                         "sourceUrl":  "https://github.com/KOOL4/JellyFusion/releases/download/v2.0.0/JellyFusion-v2.0.0.zip",
+                         "checksum":  "5e180fbcd1b14071d36c0af777c532bd",
+                         "timestamp":  "2026-04-22T14:12:19Z"
+                     }
+                 ]
+}
+]
